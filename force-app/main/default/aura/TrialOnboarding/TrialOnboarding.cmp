@@ -1,0 +1,12 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes" controller="TrialOnboardingController" access="global" >
+    <!-- <aura:handler name="init" value="{!this}" action="{!c.doInit}"/> -->
+    <aura:handler name="render" value="{!this}" action="{!c.afterRender}"  />
+    <aura:attribute name="showLoadingSpinner" type="Boolean" default="true" />
+	<aura:if isTrue="{!v.showLoadingSpinner}">
+      <div class="slds-align_absolute-center">
+     	 <lightning:spinner aura:id="spinner" variant="brand"  size="medium"/>
+      </div>
+    </aura:if> 
+    <iframe  aura:id="trialonboarding-iframe" width="100%" style="border: 0px solid; height: calc(100vh - 225px)" src="" /> 
+ 
+</aura:component>

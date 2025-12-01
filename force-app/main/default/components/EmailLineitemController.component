@@ -1,0 +1,93 @@
+<apex:component controller="QuoteLineItemsController" access="global">
+    <apex:attribute name="quoteId" description="ID of the Quote record" type="Id" assignTo="{!internalQuoteId}"/>
+
+    
+    
+     
+        
+            <apex:repeat value="{!sortedLineItems}" var="item">
+                <apex:outputPanel layout="none" rendered="{!item.Unit_Price__c < item.ListPrice}">
+                    <tr style="border-bottom: 2px solid #f2f2f2; color: #dc3545">
+                        <td style="padding: 8px">{!item.Product_Name__c}</td>
+                        <td style="padding: 8px; text-align: right">
+                            <apex:outputText value="{0, number, #,##0.00}">
+                                <apex:param value="{!item.ListPrice}" />
+                            </apex:outputText>
+                        </td>
+                        <td style="padding: 8px; text-align: right; min-width: 90px; width: 120px;">
+                            <apex:outputText value="{0, number, #,##0.00}">
+                                <apex:param value="{!item.UnitPrice}" />
+                            </apex:outputText>
+                        </td>
+                        <td style="padding: 8px; text-align: center">
+                            <apex:outputText value="{0, number, #,##0.00}">
+                                <apex:param value="{!item.Quantity}" />
+                            </apex:outputText>
+                        </td>
+                        <td style="padding: 8px; text-align: center">
+                            <apex:outputText value="{0, number, #,##0.00}">
+                                <apex:param value="{!item.Discount}" />
+                            </apex:outputText>
+                        </td>
+                        <td style="padding: 8px; text-align: right">
+                            <apex:outputText value="{0, number, #,##0.00}">
+                                <apex:param value="{!item.Discount__c}" />
+                            </apex:outputText>
+                        </td>
+                        <td style="padding: 8px; text-align: right; min-width: 90px; width: 120px;">
+                            <apex:outputText value="{0, number, #,##0.00}">
+                                <apex:param value="{!item.Unit_Price__c}" />
+                            </apex:outputText>
+                        </td>
+                        <td style="padding: 8px; text-align: right">
+                            <apex:outputText value="{0, number, #,##0.00}">
+                                <apex:param value="{!item.TotalPrice}" />
+                            </apex:outputText>
+                        </td>
+                    </tr>
+                </apex:outputPanel>
+
+                <apex:outputPanel layout="none" rendered="{!item.Unit_Price__c >= item.ListPrice}">
+                    <tr style="border-bottom: 2px solid #f2f2f2">
+                        <td style="padding: 8px">{!item.Product_Name__c}</td>
+                        <td style="padding: 8px; text-align: right">
+                            <apex:outputText value="{0, number, #,##0.00}">
+                                <apex:param value="{!item.ListPrice}" />
+                            </apex:outputText>
+                        </td>
+                        <td style="padding: 8px; text-align: right; min-width: 90px; width: 90px;">
+                            <apex:outputText value="{0, number, #,##0.00}">
+                                <apex:param value="{!item.UnitPrice}" />
+                            </apex:outputText>
+                        </td>
+                        <td style="padding: 8px; text-align: center">
+                            <apex:outputText value="{0, number, #,##0.00}">
+                                <apex:param value="{!item.Quantity}" />
+                            </apex:outputText>
+                        </td>
+                        <td style="padding: 8px; text-align: center">
+                            <apex:outputText value="{0, number, #,##0.00}">
+                                <apex:param value="{!item.Discount}" />
+                            </apex:outputText>
+                        </td>
+                        <td style="padding: 8px; text-align: right">
+                            <apex:outputText value="{0, number, #,##0.00}">
+                                <apex:param value="{!item.Discount__c}" />
+                            </apex:outputText>
+                        </td>
+                        <td style="padding: 8px; text-align: right; min-width: 90px; width: 90px;">
+                            <apex:outputText value="{0, number, #,##0.00}">
+                                <apex:param value="{!item.Unit_Price__c}" />
+                            </apex:outputText>
+                        </td>
+                        <td style="padding: 8px; text-align: right">
+                            <apex:outputText value="{0, number, #,##0.00}">
+                                <apex:param value="{!item.TotalPrice}" />
+                            </apex:outputText>
+                        </td>
+                    </tr>
+                </apex:outputPanel>
+            </apex:repeat>
+        
+    
+</apex:component>

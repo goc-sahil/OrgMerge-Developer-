@@ -1,0 +1,204 @@
+/* -------------------------------------------------
+   TWO-ROW SCORE SUMMARY
+   ------------------------------------------------- */
+.score-summary-wrapper {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #d8dde6;
+    border-radius: 0.5rem;
+    background: #f9f9f9;
+    overflow: hidden;
+    min-width: 450px;
+}
+
+.summary-headers,
+.summary-values {
+    display: flex;
+    flex: 1;
+}
+
+.summary-box {
+    flex: 1;
+    text-align: center;
+    padding: 0.5rem;
+    min-width: 90px;
+    border-right: 1px solid #d8dde6;
+    border-top: 1px solid #d8dde6;
+}
+.summary-box:last-child { border-right: none; }
+
+/* Header row */
+.summary-headers .summary-box {
+    background: #f9f9f9;
+}
+
+/* Value row */
+.summary-values  {
+    background: #f9f9f9;
+}
+
+/* Probability header */
+.summary-headers .probability-header {
+    background: #f9f9f9;
+}
+
+.probability-value { 
+    background-color: #f44336;
+    color: #fff;
+    font-weight: bold; 
+    text-align: center; 
+}
+.probability-green  { background-color: #4caf50; }
+.probability-orange { background-color: #ff9800; }
+.probability-red    { background-color: #d32f2f; }
+
+/* -------------------------------------------------
+   MODAL STYLES
+   ------------------------------------------------- */
+.slds-modal { display: block; }
+.custom-modal-container { 
+    width: 92%; 
+    height: 110%; 
+    max-width: 100%; 
+    max-height: 110%; 
+}
+.slds-modal__content { 
+    overflow-y: auto; 
+    max-height: calc(100% - 8rem); 
+}
+.custom-modal { 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+}
+
+.slds-text-heading_small {
+    background-color: oklch(.97 .014 254.604);
+    border: 1px solid oklch(.882 .059 254.128);
+    padding: 9px;
+}
+
+.slds-modal__header {
+    padding: 2px 29px 6px 15px;
+    border-bottom-style: none;
+}
+
+.header-row { 
+    flex-wrap: nowrap !important; 
+    gap: 0.5rem; 
+}
+
+.title { 
+    margin: 0; 
+    font-size: 1.4rem; 
+    white-space: nowrap; 
+}
+
+.button-spacing { 
+    margin-right: 8px; 
+}
+
+.main-container { 
+    padding: 10px .5rem 0rem .5rem; 
+    background-color: #ffffff; 
+    border-radius: 0.75rem 0.75rem 0rem 0rem; 
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1); 
+}
+
+/* -------------------------------------------------
+   LIGHTNING PROGRESS INDICATOR (PATH) CONTAINER
+   ------------------------------------------------- */
+.path-container { 
+    background-color: #ffffff;
+    padding: 1rem;
+    border-bottom: 1px solid #d8dde6;
+}
+
+/* Optional: Customize progress indicator appearance */
+.path-container lightning-progress-indicator {
+    display: block;
+}
+
+/* -------------------------------------------------
+   TABLE STYLES
+   ------------------------------------------------- */
+.table-container { 
+    overflow-x: auto; 
+}
+
+.custom-table th { 
+    background-color: #032d60; 
+    color: white; 
+    text-align: center; 
+    font-weight: 600; 
+    padding: 0.5rem; 
+}
+
+.custom-table td { 
+    background-color: white; 
+    padding: 0.5rem; 
+    vertical-align: middle; 
+}
+
+/* Column widths */
+.col-number   { 
+    width: 50px; 
+    text-align: center; 
+}
+.col-question { 
+    width: 200px; 
+    word-wrap: break-word; 
+    word-break: break-all; 
+    white-space: normal; 
+}
+.col-answer   { 
+    width: 100px; 
+    text-align: center; 
+}
+.col-comment  { 
+    width: 300px; 
+}
+.col-score    { 
+    width: 40px; 
+    text-align: center; 
+}
+
+lightning-textarea, 
+lightning-combobox { 
+    width: 100%; 
+}
+.slds-modal_small {
+    z-index: 9002;
+}
+
+.slds-modal_small + .slds-backdrop {
+    z-index: 9001;
+}
+/* Red border for invalid required fields */
+/* .invalid-field {
+    --sds-c-textarea-color-border: #c23934;
+    --sds-c-textarea-color-border-focus: #c23934;
+    --sds-c-combobox-color-border: #c23934;
+    --sds-c-combobox-color-border-focus: #c23934;
+    border-color: #c23934 !important;
+    box-shadow: 0 0 0 1px #c23934 inset;
+}
+
+.invalid-field lightning-textarea,
+.invalid-field lightning-combobox {
+    border-color: #c23934;
+} */
+ invalid_field {
+   /* SLDS design-tokens for the *input* element */
+    --sds-c-textarea-color-border: #c23934;
+    --sds-c-textarea-color-border-focus: #c23934;
+    --sds-c-combobox-color-border: #c23934;
+    --sds-c-combobox-color-border-focus: #c23934;
+}
+
+/* Force the border on the native <textarea> / <input> that lightning-textarea creates */
+.invalid_field lightning-textarea textarea,
+.invalid_field lightning-combobox .slds-dropdown-trigger .slds-combobox__input {
+    border: 1px solid #c23934 !important;
+    box-shadow: 0 0 0 1px #c23934 inset !important;
+}

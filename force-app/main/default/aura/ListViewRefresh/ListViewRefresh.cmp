@@ -1,0 +1,15 @@
+<aura:component implements="flexipage:availableForAllPageTypes,force:hasRecordId" description="List View Refresh">
+    <aura:handler name="init" value="{!this}" action="{!c.onInit}"/> 
+    <aura:attribute name="intervalId" type="String"/>
+    <aura:attribute name="posX" type="Integer"/>
+    <aura:attribute name="posY" type="Integer"/>
+    <aura:attribute name="posX2" type="Integer"/>
+    <aura:attribute name="posY2" type="Integer"/>
+    <aura:method name="reloadView" action="{!c.reloadView}" description="Reloads the view." />
+    <aura:handler event="aura:locationChange" action="{!c.reload}"/>
+
+    <div style='padding-top: 5px; padding-left:5px; padding-bottom:10px;'> Auto refreshes Case List View every minute. </div>   
+    &nbsp;
+    <lightning:button aura:id="disableButton" variant="neutral" label="Disable" onclick="{!c.refresh }" disabled="false"/> 
+    <lightning:button aura:id="enableButton" variant="neutral" label="Enable" onclick="{!c.refresh }" disabled="true"/> 
+</aura:component>

@@ -1,0 +1,621 @@
+<apex:page showHeader="false" sidebar="false" controller="CSATController">
+	<head>
+		
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta name="viewport" content="width=device-width"/>
+		
+		<!-- TITLE -->
+		<title>Rate the person who helped you - Service Cloud</title>
+		
+		<!-- DESK FAVICON -->
+		<!--<link rel="shortcut icon" type="image/x-icon" href="http://webassets.desk.com/resources/images/icons/favicon.ico">-->
+		
+		<!-- RATING FAVICON -->
+        <link rel="shortcut icon" type="image/x-icon" href="images/4.png"/>
+		
+		<style>
+			html {
+				box-sizing: border-box;
+				text-rendering: optimizeLegibility !important;
+				-webkit-font-smoothing: antialiased !important;
+			}
+			
+			*, *:before, *:after {
+				box-sizing: inherit;
+			}
+			
+			body {
+				margin: 0;
+				padding: 0;
+				font-family: Avenir, Myriad Pro, sans-serif !important;
+				color: #383838;
+			}
+			
+			header {
+				min-width: 400px;
+				max-width: 600px;
+				width: 100%;
+				height: auto;
+				margin: auto;
+				margin-top: 20px;
+				text-align: center;
+				margin-bottom: 20px;
+			}
+			
+			tr {
+				cursor: pointer;
+			}
+			
+			.logo {
+				margin: auto;
+				width: 150px;
+				height: 65px;
+				margin-bottom: 20px;
+			}
+			
+			/* ALERT WARNING */
+			
+			#warning {
+				margin:auto;
+				width:100%;
+				background: #fff9ab; 
+				padding:15px;
+				margin-top: -80px;
+				animation: warningIn 700ms 1500ms forwards;
+				-webkit-animation: warningIn 700ms 1500ms forwards;
+            	text-align: center;
+			}
+			
+			/* ANIMATE ALERT WARNING */
+			
+			@keyframes warningIn
+			{
+				from {margin-top: -80px;}
+				to {margin-top: 0;}
+			}
+
+			@-webkit-keyframes warningIn /* Safari and Chrome */
+			{
+				from {margin-top: -80px;}
+				to {margin-top: 0;}
+			}
+			
+			/* ALERT WARNING TEXT */
+			
+			#warning h1 {
+				font-size: 20px;
+				font-weight: bold;
+				margin-bottom: 10px;
+				padding-left: 10px;
+				padding-right: 10px;
+				margin-bottom: 0;
+				text-align: center;
+				margin-top: 0;
+				animation: warningFade 1400ms 1500ms forwards;
+				-webkit-animation: warningFade 1400ms 1500ms forwards;
+                display: block;
+			}
+			
+			#warning h2 {
+				font-size: 14px;
+				font-weight: 300;
+				padding-left: 5px;
+				padding-right: 5px;
+				margin-top: 0;
+				margin-bottom: 0;
+				text-align: center;
+				animation: warningFade 1400ms 1500ms forwards;
+				-webkit-animation: warningFade 1400ms 1500ms forwards;
+			}
+			
+			/* ANIMATE ALERT WARNING TEXT */
+			
+			@keyframes warningFade
+			{
+				from {opacity: 0;}
+				to {opacity: 100;}
+			}
+
+			@-webkit-keyframes warningFade /* Safari and Chrome */
+			{
+				from {opacity: 0;}
+				to {opacity: 100;}
+			}
+			
+			/* STANDARD HEADERS */
+			
+			h1 {
+				font-size: 26px;
+				font-weight: bold;
+				margin-bottom: 10px;
+				padding-left: 10px;
+				padding-right: 10px;
+				margin-bottom: 0;
+			}
+			
+			h2 {
+				font-size: 16px;
+				font-weight: 300;
+				padding-left: 5px;
+				padding-right: 5px;
+				margin-top: 0;
+			}
+			
+			/* PANEL FOR HOLDING FORM SECTIONS */
+			
+			#panel {
+				min-width: 400px;
+				max-width: 600px;
+				width: 100%;
+				margin: auto;
+				background: #f2f2f2;
+				border: 1px solid #e1e1e1;
+				border-radius: 3px;
+				width: 500px;
+				height: auto;
+				overflow: hidden;
+				margin-top: 20px;
+				margin-bottom: 50px;
+			}
+			
+			/* PANEL HEADER TEXT */
+			
+			#panel h3 {
+				margin: 0;
+				padding: 0;
+				font-size: 15px;
+				font-weight: bold;
+			}
+			
+			/* FORM SECTIONS */
+			
+			.section {
+				min-width: 400px;
+				width: 500px;
+				border-bottom: 1px solid #e1e1e1;
+				padding: 10px;
+				text-align: center;
+				float: left;
+				position: relative;
+			}
+			
+			form {
+				height: auto;
+				overflow: hidden;
+				margin: 0;
+				padding: 0;
+			}
+			
+			textarea {
+				width: 100%;
+				height: 100px;
+				float: left;
+				border: 1px solid #dbdbdb;
+				border-radius: 3px;
+				margin-top: 20px;
+				font-size: 13px;
+				padding: 5px;
+				color: #042c39;
+			}
+			
+			input {
+				
+				
+			}
+			
+			input[type=textarea], textarea {
+				outline: none;
+				box-shadow: 0 1px 3px rgba(161, 179, 183, 0.4);
+				border-bottom: 1px solid #DDDDDD;
+			}
+			
+			.submit {
+				border: none;
+				margin: 0;
+				padding: 0;
+				margin-bottom: 20px;
+			}
+			
+			.submit:hover {
+				
+			}
+			
+			.section input {
+				margin: auto;
+				margin-left: 0px;
+				margin-top: 5px;
+				
+			}
+			
+			table {
+				margin-top: 20px;
+			}
+			
+			/* PARAGRAPH STYLE */
+			
+			p {
+				margin: 0;
+			    padding: 0;
+			    font-size: 15px;
+			    font-weight: 300;
+			    padding-top: 10px;
+			}
+			
+			.pleft {
+				text-align: left;
+			}
+			
+			.last {
+				border-bottom: none;
+			}
+			
+			input.btn {
+				margin: 0; 
+				padding: 5px 20px !important;
+				background-color:#00C782;
+            	background-image:none;
+				border: none;
+				border-radius:18px;
+				color:#ffffff;
+				display:inline-block;
+				font-family:Avenir,sans-serif !important;
+				font-size:20px;
+				font-weight:bold;
+				text-align:center;
+				text-decoration:none;
+				-webkit-text-size-adjust:none;
+				mso-hide:all; 
+				cursor: pointer;
+				-webkit-transition:background .3s ease;
+				-webkit-appearance: none;
+			}
+			
+			.btn:hover {
+				background-color: #5cb85c;
+				border: none;
+			}
+
+			* {
+   			outline:none;
+			}
+			
+			/* TOOLTIPS */
+			
+			/* Base styles for the element that has a tooltip */
+			[data-tooltip],
+			.tooltip {
+			  position: relative;
+			  cursor: default;
+			}
+			
+			/* Base styles for the entire tooltip */
+			[data-tooltip]:before,
+			[data-tooltip]:after,
+			.tooltip:before,
+			.tooltip:after {
+			  position: absolute;
+			  visibility: hidden;
+			  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+			  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
+			  opacity: 0;
+			  -webkit-transition: 
+			      opacity 0.2s ease-in-out,
+			        visibility 0.2s ease-in-out,
+			        -webkit-transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
+			    -moz-transition:    
+			        opacity 0.2s ease-in-out,
+			        visibility 0.2s ease-in-out,
+			        -moz-transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
+			    transition:         
+			        opacity 0.2s ease-in-out,
+			        visibility 0.2s ease-in-out,
+			        transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
+			  -webkit-transform: translate3d(0, 0, 0);
+			  -moz-transform:    translate3d(0, 0, 0);
+			  transform:         translate3d(0, 0, 0);
+			  pointer-events: none;
+			}
+			
+			/* Show the entire tooltip on hover and focus */
+			[data-tooltip]:hover:before,
+			[data-tooltip]:hover:after,
+			[data-tooltip]:focus:before,
+			[data-tooltip]:focus:after,
+			.tooltip:hover:before,
+			.tooltip:hover:after,
+			.tooltip:focus:before,
+			.tooltip:focus:after {
+			  visibility: visible;
+			  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
+			  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=100);
+			  opacity: 1;
+			}
+			
+			/* Base styles for the tooltip's directional arrow */
+			.tooltip:before,
+			[data-tooltip]:before {
+			  z-index: 1001;
+			  border: 6px solid transparent;
+			  background: transparent;
+			  content: "";
+			}
+			
+			/* Base styles for the tooltip's content area */
+			.tooltip:after,
+			[data-tooltip]:after {
+			  z-index: 1000;
+			  padding: 15px;
+			  width: 190px;
+			  background-color: #000;
+			  background-color: hsla(0, 0%, 20%, 0.95);
+			  color: #fff;
+			  content: attr(data-tooltip);
+			  font-size: 15px;
+			  line-height: 1.2;
+			  font-weight: bold;
+			  border-radius: 3px;
+			}
+			
+			/* Directions */
+			
+			/* Top (default) */
+			[data-tooltip]:before,
+			[data-tooltip]:after,
+			.tooltip:before,
+			.tooltip:after,
+			.tooltip-top:before,
+			.tooltip-top:after {
+			  bottom: 100%;
+			  left: 50%;
+			}
+			
+			[data-tooltip]:before,
+			.tooltip:before,
+			.tooltip-top:before {
+			  margin-left: -6px;
+			  margin-bottom: -12px;
+			  border-top-color: #000;
+			  border-top-color: hsla(0, 0%, 20%, 0.9);
+			}
+			
+			/* Horizontally align top/bottom tooltips */
+			[data-tooltip]:after,
+			.tooltip:after,
+			.tooltip-top:after {
+			  margin-left: -95px;
+			}
+			
+			[data-tooltip]:hover:before,
+			[data-tooltip]:hover:after,
+			[data-tooltip]:focus:before,
+			[data-tooltip]:focus:after,
+			.tooltip:hover:before,
+			.tooltip:hover:after,
+			.tooltip:focus:before,
+			.tooltip:focus:after,
+			.tooltip-top:hover:before,
+			.tooltip-top:hover:after,
+			.tooltip-top:focus:before,
+			.tooltip-top:focus:after {
+			  -webkit-transform: translateY(-12px);
+			  -moz-transform:    translateY(-12px);
+			  transform:         translateY(-12px); 
+			}
+			
+			/* Bottom */
+			.tooltip-bottom:before,
+			.tooltip-bottom:after {
+			  top: 100%;
+			  bottom: auto;
+			  left: 50%;
+			}
+			
+			.tooltip-bottom:before {
+			  margin-top: -12px;
+			  margin-bottom: 0;
+			  border-top-color: transparent;
+			  border-bottom-color: #000;
+			  border-bottom-color: hsla(0, 0%, 20%, 0.9);
+			}
+			
+			.tooltip-bottom:hover:before,
+			.tooltip-bottom:hover:after,
+			.tooltip-bottom:focus:before,
+			.tooltip-bottom:focus:after {
+			  -webkit-transform: translateY(12px);
+			  -moz-transform:    translateY(12px);
+			  transform:         translateY(12px); 
+			}
+			
+			/* Right */
+			.tooltip-right:before,
+			.tooltip-right:after {
+			  bottom: 50%;
+			  left: 100%;
+			}
+			
+			.tooltip-right:before {
+			  margin-bottom: 0;
+			  margin-left: -12px;
+			  border-top-color: transparent;
+			  border-right-color: #000;
+			  border-right-color: hsla(0, 0%, 20%, 0.9);
+			}
+			
+			.tooltip-right:hover:before,
+			.tooltip-right:hover:after,
+			.tooltip-right:focus:before,
+			.tooltip-right:focus:after {
+			  -webkit-transform: translateX(12px);
+			  -moz-transform:    translateX(12px);
+			  transform:         translateX(12px); 
+			}
+			
+			/* Move directional arrows down a bit for left/right tooltips */
+			.tooltip-left:before,
+			.tooltip-right:before {
+			  top: 3px;
+			}
+			
+			/* Vertically center tooltip content for left/right tooltips */
+			.tooltip-left:after,
+			.tooltip-right:after {
+			  margin-left: 0;
+			  margin-bottom: -16px;
+			}
+
+
+			
+			
+		</style>
+        <script>
+            function changeValue(input, textid) {                 
+                document.getElementById(textid).value = input.value;               
+            }
+        
+        	function findGetParameter(parameterName) {
+                var result = null,
+                    tmp = [];
+                location.search
+                    .substr(1)
+                    .split("&")
+                    .forEach(function (item) {
+                      tmp = item.split("=");
+                      if (tmp[0] === parameterName) result = decodeURIComponent(tmp[1]);
+                    });
+                return result;
+			}
+        
+        	function setScore() {
+                if(document.referrer.includes("force.com")){
+                    
+                	alert("Internal users are not allowed to give feedback.");
+                    //window.close();
+                }
+        		else{
+                   
+                    agentScore = document.getElementsByName('agentFeedbackScoreRadio');
+    
+                    for (i = 0; i < agentScore.length; i++) { 
+                        if(agentScore[i].value == findGetParameter('Score')){
+                            agentScore[i].checked = "checked";
+                        }
+                    }
+                }
+            }
+        window.onload = setScore;
+        
+        </script>
+	</head>
+	<body>
+		<div id="warning">
+			<h1>Your feedback has not been submitted yet.</h1>
+			<h2>Please add your comments, then confirm and submit your ratings below. All fields are optional.</h2>
+		</div>
+		<header>
+			<div class="logo">
+				<img src="{! $Resource.CSAT}/SalesforceServiceCloudLogo.png" height="65" alt="Service Cloud Support Rating"/>
+			</div>
+			<!--<h1>Your feedback has not been submitted yet.</h1>
+			<h2>Please rate your support experience separately from the product, then confirm and submit your ratings below. All fields are optional.</h2>-->
+		</header>
+		
+		<div id="panel">
+			
+			<!-- FORM STARTS -->
+			<apex:form >
+            <apex:pageMessages id="showmsg"></apex:pageMessages>
+			<apex:inputHidden value="{!agentFeedbackScore}"  id="agentFeedbackScore" />
+            <apex:inputHidden value="{!productFeedbackScore}" id="productFeedbackScore" />
+			<!-- SUPPORT RATING -->
+			<div class="section tooltip-bottom" data-tooltip="This rating is for the support person who helped you.">
+				<h3>How would you rate the support <em>person</em> who helped you?</h3>
+				<table align="center">
+					<tbody>
+						<tr>
+							<td style="padding-right: 20px;">
+                                <label><img style="height:29px;width:30px;" src="{! $Resource.CSAT}/4.png" alt="  :D" class="CToWUd"/><br/>
+                                    <input type="radio" name="agentFeedbackScoreRadio" value="4" onclick="changeValue(this,'{!$Component.agentFeedbackScore}');"/></label>
+        					</td>
+        					<td style="padding-right: 20px;">
+                                <label><img style="height:29px;width:30px;" src="{! $Resource.CSAT}/3.png" alt="  :)" class="CToWUd"/><br/>
+                                    <input type="radio" name="agentFeedbackScoreRadio" value="3" onclick="changeValue(this,'{!$Component.agentFeedbackScore}');"/></label>
+        					</td>
+        					<td style="padding-right: 20px;">
+                                <label><img style="height:29px;width:30px;" src="{! $Resource.CSAT}/2.png" alt="  :|" class="CToWUd"/><br/>
+                                    <input type="radio" name="agentFeedbackScoreRadio" value="2" onclick="changeValue(this,'{!$Component.agentFeedbackScore}');"/></label>
+        					</td>
+        					<td>
+                                <label><img style="height:29px;width:30px;" src="{! $Resource.CSAT}/1.png" alt="  :(" class="CToWUd"/><br/>
+                                    <input type="radio" name="agentFeedbackScoreRadio" value="1" onclick="changeValue(this,'{!$Component.agentFeedbackScore}');"/></label>
+        					</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			
+			<!-- PRODUCT RATING 
+			<div class="section tooltip-bottom" data-tooltip="This rating is for Service Cloud as a product. Not the support person.">
+				<h3>How happy are you with Salesforce Service Cloud as a product?</h3>
+				<table align="center">
+					<tbody>
+						<tr>
+							<td style="padding-right: 20px;">
+                                <label><img style="height:29px;width:30px;" src="{! $Resource.CSAT}/4.png" alt="  :D" class="CToWUd"/><br/>
+                                    <input type="radio" name="productFeedbackScoreRadio" value="4" onclick="changeValue(this,'{!$Component.productFeedbackScore}');"/></label>
+        					</td>
+        					<td style="padding-right: 20px;">
+                                <label><img style="height:29px;width:30px;" src="{! $Resource.CSAT}/3.png" alt="  :D" class="CToWUd"/><br/>
+                                    <input type="radio" name="productFeedbackScoreRadio" value="3" onclick="changeValue(this,'{!$Component.productFeedbackScore}');"/></label>
+        					</td>
+        					<td style="padding-right: 20px;">
+                                <label><img style="height:29px;width:30px;" src="{! $Resource.CSAT}/2.png" alt="  :D" class="CToWUd"/><br/>
+                                    <input type="radio" name="productFeedbackScoreRadio" value="2" onclick="changeValue(this,'{!$Component.productFeedbackScore}');"/></label>
+        					</td>
+        					<td>
+                                <label><img style="height:29px;width:30px;" src="{! $Resource.CSAT}/1.png" alt="  :D" class="CToWUd"/><br/>
+                                    <input type="radio" name="productFeedbackScoreRadio" value="1" onclick="changeValue(this,'{!$Component.productFeedbackScore}');"/></label>
+        					</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>-->
+			
+			<!-- FEEDBACK SECTION -->
+			<div class="section last">
+				<p class="pleft">Tell us more about your support experience. What's great, and what could use some improvement.</p>
+				<label for="feedback"></label><apex:inputTextarea id="feedback" value="{!feedbackComments}"></apex:inputTextarea>
+			</div>
+			
+			
+			<!-- SUBMIT FORM -->
+			<div class="section submit">
+
+				<input type="hidden" name="c" value="3" />
+				<input type="hidden" name="i" value="1079729" />
+				<input type="hidden" name="ic" value="1" />
+				<input type="hidden" name="a" value="23177966" />
+				<input type="hidden" name="h" value="eb78b10acdaa5d8c996a181ae5449519" />
+				
+				<div style="text-align: center;">
+					<!--[if mso]>
+						<v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" href="http://" style="height:36px;v-text-anchor:middle;width:160px;" arcsize="50%" strokecolor="#17bd80" fillcolor="#00C782">
+							<w:anchorlock/>
+							<center style="color:#ffffff;font-family:Avenir,sans-serif !important;font-size:13px;font-weight:bold;">Submit your ratings</center>
+						</v:roundrect>
+					<![endif]-->
+					<!--<a href="https://status.desk.com/" style="background-color:#00C782;border:1px solid #17bd80;border-radius:18px;color:#ffffff;display:inline-block;font-family:Avenir,sans-serif !important;font-size:13px;font-weight:bold;line-height:36px;text-align:center;text-decoration:none;width:160px;-webkit-text-size-adjust:none;mso-hide:all;">
+						Submit your ratings
+					</a>-->
+                    <!-- <input class="btn" style="" type="submit" value="Submit your ratings"/> -->
+					<apex:commandButton value="Submit your rating" action="{!saveFeedback}"/>
+
+				</div>
+			</div>
+		
+			</apex:form>
+			<!-- FORM ENDS -->
+			
+		</div>
+	</body>
+</apex:page>

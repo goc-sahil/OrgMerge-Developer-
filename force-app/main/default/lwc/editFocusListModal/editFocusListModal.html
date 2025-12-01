@@ -1,0 +1,330 @@
+<!--
+  @description       : Opportunity Screening Questionnaire as Quick Action
+  @author            : ChangeMeIn@UserSettingsUnder.SFDoc
+  @group             : 
+  @last modified on  : 11-05-2025
+  @last modified by  : ChangeMeIn@UserSettingsUnder.SFDoc
+-->
+
+<template>
+    
+    <div class="outer-modal">
+        <lightning-quick-action-panel>
+            <!-- Header Content: Title and Summary (outside slots for custom placement) -->
+            <div class="sticky-container">
+                <div
+                    class="header-row slds-grid slds-grid_vertical-align-center slds-p-horizontal_small slds-p-vertical_medium">
+                    <div class="slds-col slds-text-align_left">
+                        <strong class="title">Opportunity Screening Questionnaire</strong>
+                    </div>
+
+                    <!-- TWO-ROW SCORE SUMMARY -->
+                    <div class="slds-col score-summary-wrapper">
+                        <!-- ROW 1 – HEADERS -->
+                        <div class="summary-headers slds-grid">
+                            <div class="summary-box">
+                                <p>Total Questions</p>
+                            </div>
+                            <div class="summary-box">
+                                <p>Answered</p>
+                            </div>
+                            <div class="summary-box">
+                                <p>Not Answered</p>
+                            </div>
+                            <div class="summary-box">
+                                <p>Achieved Score</p>
+                            </div>
+                            <div class="summary-box probability-header">
+                                <p>Probability</p>
+                            </div>
+                        </div>
+
+                        <!-- ROW 2 – VALUES -->
+                        <div class="summary-values slds-grid">
+                            <div class="summary-box"><strong>{totalQuestions}</strong></div>
+                            <div class="summary-box"><strong>{answeredCount}</strong></div>
+                            <div class="summary-box"><strong>{notAnsweredCount}</strong></div>
+                            <div class="summary-box"><strong>{achievedScore}</strong></div>
+                            <div class={probabilityCellClass}>
+                                <strong>{probability}%</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Body: Tabs and Screens -->
+                <!-- <div slot="body"> -->
+
+                <!-- Lightning Progress Indicator (Path) -->
+                <div class="path-container">
+                    <lightning-progress-indicator current-step={currentStepValue} type="path" variant="base">
+                        <lightning-progress-step label="SI Alignment" value="step1" onclick={handleStepClick}>
+                        </lightning-progress-step>
+                        <lightning-progress-step label="Technical Knowledge" value="step2" onclick={handleStepClick}>
+                        </lightning-progress-step>
+                        <lightning-progress-step label="Project Details" value="step3" onclick={handleStepClick}>
+                        </lightning-progress-step>
+                    </lightning-progress-indicator>
+                </div>
+            </div>
+    
+    <div class="main-container">
+        <!-- ==== FIRST SCREEN (SI Alignment) ==== -->
+        <template if:false={isSecondScreenOpen}>
+            <template if:false={isThirdScreenOpen}>
+                <div class="sticky-container">
+                <header class="slds-modal__header">
+                    <h3 class="slds-text-heading_small">
+                        These questions are designed to assess how closely the SI is aligned with the EU and the
+                        overall project commercials.
+                    </h3>
+                    <table class="slds-table slds-table_bordered slds-table_cell-buffer custom-table">
+                        <thead>
+                            <tr>
+                                <th class="col-number">#</th>
+                                <th class="col-question">Question</th>
+                                <th class="col-answer">Answer?</th>
+                                <th class="col-comment">Answer / Comments *</th>
+                                <th class="col-score">Score</th>
+                            </tr>
+                        </thead>
+                    </table>
+
+                </header>
+                </div>
+                <div class="slds-modal__content slds-p-around_medium">
+                    <div class="table-container">
+                        <table class="slds-table slds-table_bordered slds-table_cell-buffer custom-table">
+                            <tbody>
+                                <template for:each={b1Questions} for:item="q">
+                                    <tr key={q.id}>
+                                        <td class="col-number">{q.displayId}</td>
+                                        <td class="col-question">{q.question}</td>
+                                        <td class="col-answer">
+                                            <lightning-input type="checkbox" name={q.field} checked={q.answer}
+                                                onchange={handleCheckboxChange} data-field={q.field}></lightning-input>
+                                        </td>
+                                        <td class="col-comment">
+                                            <template if:true={q.isCombobox}>
+                                                <lightning-combobox name={q.commentField} value={q.comment}
+                                                    options={chancesOptions} disabled={q.isCommentDisabled}
+                                                    onchange={handleCommentChange}
+                                                    data-field={q.commentField}  class={q.commentErrorClass}></lightning-combobox>
+                                            </template>
+                                            <template if:false={q.isCombobox}>
+                                                <lightning-textarea name={q.commentField}
+                                                    placeholder="Enter your answer..." value={q.comment}
+                                                    disabled={q.isCommentDisabled} onchange={handleCommentChange}
+                                                    data-field={q.commentField}  class={q.commentErrorClass}></lightning-textarea>
+                                            </template>
+                                        </td>
+                                        <td class="col-score">
+                                            <!-- <lightning-input type="number" value={q.score} disabled></lightning-input> -->
+                                             {q.score}
+                                        </td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <!-- <footer class="slds-modal__footer">
+                            <lightning-button label="Cancel" variant="neutral" onclick={closeModal}
+                                class="button-spacing"></lightning-button>
+                            <lightning-button label="Save" variant="brand" onclick={saveAndClose}
+                                class="button-spacing"></lightning-button>
+                            <lightning-button label="Save and Continue" variant="brand"
+                                onclick={saveAndContinue}></lightning-button>
+                        </footer> -->
+            </template>
+        </template>
+
+        <!-- ==== SECOND SCREEN (Technical Knowledge) ==== -->
+        <template if:true={isSecondScreenOpen}>
+            <template if:false={isThirdScreenOpen}>
+                <div class="sticky-container">
+                <header class="slds-modal__header">
+                    <h3 class="slds-text-heading_small">
+                        These set of questions are to test the knowledge of the SI and how much grip they have
+                        on the project
+                    </h3>
+                    <table class="slds-table slds-table_bordered slds-table_cell-buffer custom-table">
+                        <thead>
+                            <tr>
+                                <th class="col-number">#</th>
+                                <th class="col-question">Question</th>
+                                <th class="col-answer">Answer?</th>
+                                <th class="col-comment">Answer / Comments *</th>
+                                <th class="col-score">Score</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </header>
+                </div>
+                <div class="slds-modal__content slds-p-around_medium">
+                    <div class="table-container">
+                        <table class="slds-table slds-table_bordered slds-table_cell-buffer custom-table">
+                            <tbody>
+                                <template for:each={b2Questions} for:item="q">
+                                    <tr key={q.id}>
+                                        <td class="col-number">{q.displayId}</td>
+                                        <td class="col-question">{q.question}</td>
+                                        <td class="col-answer">
+                                            <lightning-input type="checkbox" name={q.field} checked={q.answer}
+                                                onchange={handleSecondScreenCheckboxChange} data-field={q.field}>
+                                            </lightning-input>
+                                        </td>
+                                        <td class="col-comment">
+                                            <template if:true={q.isCombobox}>
+                                                <lightning-combobox name={q.commentField} value={q.comment}
+                                                    options={productOptions} disabled={q.isCommentDisabled}
+                                                    onchange={handleSecondScreenCommentChange}
+                                                    data-field={q.commentField}  class={q.commentErrorClass}>
+                                                </lightning-combobox>
+                                            </template>
+                                            <template if:false={q.isCombobox}>
+                                                <lightning-textarea name={q.commentField}
+                                                    placeholder="Enter your answer..." value={q.comment}
+                                                    disabled={q.isCommentDisabled}
+                                                    onchange={handleSecondScreenCommentChange}
+                                                    data-field={q.commentField}  class={q.commentErrorClass}>
+                                                </lightning-textarea>
+                                            </template>
+                                        </td>
+                                        <td class="col-score">
+                                            <!-- <lightning-input type="number" value={q.score} disabled>
+                                            </lightning-input> -->
+                                            {q.score}
+                                        </td>
+                                    </tr>
+                                </template>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- <footer class="slds-modal__footer">
+                            <lightning-button label="Back" variant="neutral" onclick={backToFirstScreen}
+                                class="button-spacing"></lightning-button>
+                            <lightning-button label="Next" variant="brand" onclick={goToThirdScreen}
+                                class="button-spacing"></lightning-button>
+                        </footer> -->
+            </template>
+        </template>
+
+        <!-- ==== THIRD SCREEN (Project Details) ==== -->
+        <template if:true={isThirdScreenOpen}>
+            <div class="sticky-container">
+            <header class="slds-modal__header">
+                <h3 class="slds-text-heading_small">
+                    These set of questions are to test how better you know EU & Project details
+                </h3>
+                <table class="slds-table slds-table_bordered slds-table_cell-buffer custom-table">
+                    <thead>
+                        <tr>
+                            <th class="col-number">#</th>
+                            <th class="col-question">Question</th>
+                            <th class="col-answer">Answer?</th>
+                            <th class="col-comment">Answer / Comments *</th>
+                            <th class="col-score">Score</th>
+                        </tr>
+                    </thead>
+                </table>
+            </header>
+            </div>
+            <div class="slds-modal__content slds-p-around_medium">
+                <div class="table-container">
+                    <table class="slds-table slds-table_bordered slds-table_cell-buffer custom-table">
+                        <tbody>
+                            <template for:each={b3Questions} for:item="q">
+                                <tr key={q.id}>
+                                    <td class="col-number">{q.displayId}</td>
+                                    <td class="col-question">{q.question}</td>
+                                    <td class="col-answer">
+                                        <lightning-input type="checkbox" name={q.field} checked={q.answer}
+                                            onchange={handleThirdScreenCheckboxChange}
+                                            data-field={q.field}></lightning-input>
+                                    </td>
+                                    <td class="col-comment">
+                                        <lightning-textarea name={q.commentField} placeholder="Enter your answer..."
+                                            value={q.comment} disabled={q.isCommentDisabled}
+                                            onchange={handleThirdScreenCommentChange}
+                                            data-field={q.commentField}  class={q.commentErrorClass}></lightning-textarea>
+                                    </td>
+                                    <td class="col-score">
+                                        <!-- <lightning-input type="number" value={q.score} disabled></lightning-input> -->
+                                         {q.score}
+                                    </td>
+                                </tr>
+                            </template>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- <footer class="slds-modal__footer">
+                        <lightning-button label="Cancel" variant="neutral" onclick={closeModal}
+                            class="button-spacing"></lightning-button>
+                        <lightning-button label="Back" variant="neutral" onclick={backToSecondScreen}
+                            class="button-spacing"></lightning-button>
+                        <lightning-button label="Submit" variant="brand" onclick={submitAndClose}></lightning-button>
+                    </footer> -->
+        </template>
+    </div>
+    <!-- </div> -->
+    <!-- ==================== CONFIRMATION MODAL (RED PROBABILITY) ==================== -->
+    <template if:true={isConfirmModalOpen}>
+        <section role="dialog" tabindex="-1" aria-labelledby="confirm-modal-title"
+                 class="slds-modal slds-fade-in-open slds-modal_small" aria-modal="true" onclick={stopPropagation}>
+            <div class="slds-modal__container">
+                <header class="slds-modal__header slds-border_bottom">
+                    <h2 id="confirm-modal-title" class="slds-text-heading_medium">Low Probability Warning</h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium">
+                    <p class="slds-text-align_center">The calculated probability is <strong class="slds-text-color_error">{probability}%</strong>.
+                       Are you sure you want to submit?</p>
+                </div>
+                <footer class="slds-modal__footer slds-border_top">
+                    <lightning-button label="Cancel" variant="neutral"
+                                      onclick={cancelConfirm} class="slds-m-right_small"></lightning-button>
+                    <lightning-button label="OK" variant="brand"
+                                      onclick={confirmSubmit}></lightning-button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+    <!-- Footer: Dynamic buttons based on screen -->
+    <div slot="footer">
+        <!-- <footer class="slds-modal__footer" > -->
+        <template if:false={isSecondScreenOpen}>
+            <template if:false={isThirdScreenOpen}>
+                <!-- First Screen Buttons -->
+                <lightning-button label="Cancel" variant="neutral" onclick={closeModal}
+                    class="button-spacing"></lightning-button>
+                <!-- <lightning-button label="Save" variant="brand" onclick={saveAndClose}
+                    class="button-spacing"></lightning-button> -->
+                <lightning-button label="Save and Continue" variant="brand"
+                    onclick={saveAndContinue}></lightning-button>
+            </template>
+        </template>
+        <template if:true={isSecondScreenOpen}>
+            <template if:false={isThirdScreenOpen}>
+                <!-- Second Screen Buttons -->
+                <lightning-button label="Back" variant="neutral" onclick={backToFirstScreen}
+                    class="button-spacing"></lightning-button>
+                <lightning-button label="Next" variant="brand" onclick={goToThirdScreen}></lightning-button>
+            </template>
+        </template>
+        <template if:true={isThirdScreenOpen}>
+            <!-- Third Screen Buttons -->
+            <lightning-button label="Cancel" variant="neutral" onclick={closeModal}
+                class="button-spacing"></lightning-button>
+            <lightning-button label="Back" variant="neutral" onclick={backToSecondScreen}
+                class="button-spacing"></lightning-button>
+            <lightning-button label="Submit" variant="brand" onclick={handleSubmitClick}></lightning-button>
+        </template>
+        <!-- </footer> -->
+    </div>
+    </lightning-quick-action-panel>
+    </div>
+</template>

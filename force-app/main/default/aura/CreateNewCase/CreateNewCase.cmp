@@ -1,0 +1,9 @@
+<aura:component implements="lightning:actionOverride,flexipage:availableForRecordHome,force:hasRecordId" access="global" >
+    <aura:attribute name="newCase" type="Case"  default="{ 'sobjectType': 'Case','Account': '','Contact':'','Warranty':'',}"/>
+    <form> 
+       <lightning:input aura:id="contactField" type="lookup" value="{!v.newCase.Account}" Name="Account Name" label ="Account Name"/>
+       <lightning:input aura:id="contactField" type="lookup" value="{!v.newCase.Contact}" name="Contact Name" label="Contact Name"/>
+       <lightning:input aura:id="contactField" type="picklist"  value="{!v.newCase.custom_warranty_status__c}"  Name="Warranty Status" label="Warranty Status"/>
+       <lightning:button aura:id="contactField" label="Save Contact" onclick="{!c.savecontact}"/>
+    </form>
+</aura:component>

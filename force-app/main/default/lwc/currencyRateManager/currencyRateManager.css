@@ -1,0 +1,240 @@
+/* Main Card Styling */
+.slds-card {
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Current Rate Display Box */
+.slds-box.slds-theme_default {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-radius: 8px;
+    padding: 1.5rem;
+    border: none;
+}
+
+.slds-box.slds-theme_default .slds-text-heading_small {
+    color: rgba(255, 255, 255, 0.9);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.slds-box.slds-theme_default .slds-text-heading_large {
+    color: white;
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin: 0.5rem 0;
+}
+
+.slds-box.slds-theme_default .slds-text-body_small {
+    color: rgba(255, 255, 255, 0.8);
+}
+
+/* Sync Mode Box Styling */
+.slds-box {
+    border-radius: 6px;
+    padding: 1rem;
+}
+
+/* Radio Button Group Enhancement */
+lightning-radio-group {
+    display: block;
+    margin-bottom: 1rem;
+}
+
+/* Input Field Styling */
+lightning-input {
+    --slds-c-input-sizing-border: 2px;
+    --slds-c-input-color-border: #d8d8d8;
+}
+
+/* Button Group Styling */
+.slds-grid_align-spread {
+    gap: 0.5rem;
+}
+
+/* Update Button Enhanced */
+lightning-button[variant="brand"] {
+    --slds-c-button-brand-color-background: #667eea;
+    --slds-c-button-brand-color-border: #667eea;
+}
+
+lightning-button[variant="brand"]:hover {
+    --slds-c-button-brand-color-background: #5568d3;
+}
+
+/* Info Box Styling */
+.slds-box.slds-theme_info {
+    background-color: #e8f4f8;
+    border-left: 4px solid #0176d3;
+    border-radius: 4px;
+}
+
+/* Modal Enhancements */
+.slds-modal__header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 1.5rem;
+}
+
+.slds-modal__header h2 {
+    color: white;
+}
+
+.slds-modal__content p strong {
+    color: #667eea;
+    font-weight: 600;
+}
+
+/* Table Styling in Modal */
+.slds-table {
+    font-size: 0.875rem;
+}
+
+.slds-table thead th {
+    background-color: #f3f3f3;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.5px;
+}
+
+.slds-table tbody tr:hover {
+    background-color: #f9f9f9;
+}
+
+.slds-table code {
+    background-color: #f4f4f4;
+    padding: 0.2rem 0.4rem;
+    border-radius: 3px;
+    font-size: 0.8rem;
+    color: #e83e8c;
+    font-family: 'Courier New', monospace;
+}
+
+/* Badge Custom Styling */
+lightning-badge {
+    font-size: 0.75rem;
+}
+
+/* Loading Spinner Container */
+lightning-spinner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+}
+
+/* Modal Sizing for Large Content */
+.slds-modal__container {
+    max-width: 80rem;
+}
+
+/* Responsive Table */
+@media (max-width: 768px) {
+    .slds-table {
+        font-size: 0.75rem;
+    }
+    
+    .slds-table thead th,
+    .slds-table tbody td {
+        padding: 0.5rem;
+    }
+    
+    .slds-modal__container {
+        max-width: 95%;
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .slds-grid_align-spread {
+        display: flex;
+        flex-direction: column;
+    }
+    
+    lightning-button {
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+    
+    .slds-box.slds-theme_default .slds-text-heading_large {
+        font-size: 2rem;
+    }
+}
+
+/* Animation for success states */
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.8;
+    }
+}
+
+.slds-text-color_success {
+    animation: pulse 2s ease-in-out infinite;
+}
+
+/* Pricebook Info Section */
+.slds-m-left_x-small {
+    color: #706e6b;
+    font-style: italic;
+}
+
+/* Static Pricebook ID Input Highlight */
+lightning-input[max-length="18"] {
+    --slds-c-input-color-border-focus: #667eea;
+}
+
+/* Radio Group Button Style */
+lightning-radio-group[type="button"] {
+    --slds-c-radio-button-color-background-checked: #667eea;
+    --slds-c-radio-button-color-border-checked: #667eea;
+}
+
+/* Enhanced Modal Backdrop */
+.slds-backdrop {
+    background-color: rgba(0, 0, 0, 0.6);
+}
+
+/* Smooth Transitions */
+.slds-modal,
+.slds-backdrop {
+    transition: opacity 0.3s ease-in-out;
+}
+
+/* Table Row Hover Effect */
+.slds-table tbody tr {
+    transition: background-color 0.2s ease;
+}
+
+/* Button Hover Effects */
+lightning-button {
+    transition: all 0.2s ease;
+}
+
+/* Empty State Styling */
+.slds-text-align_center {
+    color: #706e6b;
+    font-style: italic;
+}
+
+/* Success Badge Animation */
+lightning-badge[variant="success"] {
+    animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}

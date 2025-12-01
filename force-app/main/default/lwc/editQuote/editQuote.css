@@ -1,0 +1,634 @@
+/* Styling for lightning-quick-action-panel */
+lightning-quick-action-panel {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    max-height: 95vh;
+    /* min-height: 500px; */
+    border-radius: 0.25rem;
+    background: #ffffff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.16);
+}
+
+:host lightning-quick-action-panel .slds-modal__container {
+    width: 100%;
+    max-width: 100%;
+    min-width: 480px;
+    padding: 1rem;
+}
+.slds-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000; /* Higher z-index to ensure it appears above the main modal */
+}
+:host lightning-quick-action-panel {
+    width: 90%;
+    max-width: 100rem;
+    height: 90vh;
+    max-height: 95vh;
+    /* min-height: 600px; */
+    border-radius: 0.25rem;
+    background: #ffffff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.16);
+}
+/* Header styling for lightning-quick-action-panel */
+:host lightning-quick-action-panel .slds-modal__header {
+    background-color: #4a4a4a;
+    color: #ffffff;
+    padding: 0.5rem 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #ececec;
+}
+
+:host lightning-quick-action-panel .slds-modal__title {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: bold;
+}
+
+/* Close button styling */
+:host lightning-quick-action-panel .slds-button_icon-bare {
+    color: #ffffff;
+}
+
+/* Content area styling */
+:host lightning-quick-action-panel .slds-modal__content {
+    max-height: calc(90vh - 120px); /* Adjust for header and footer */
+    /* overflow-y: auto; */
+    padding: 1rem;
+}
+
+/* Footer styling */
+:host lightning-quick-action-panel .slds-modal__footer {
+    background-color: #ffffff;
+    padding: 0.75rem 1rem;
+    text-align: right;
+    border-top: 1px solid #d8dde6;
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+}
+.no-click lightning-progress-step {
+    pointer-events: none;
+}
+
+.no-click lightning-progress-step:hover {
+    cursor: default;
+    background: none;
+}
+.step2-content, .slds-card, .quote-line-item-table, .available-products-table {
+    overflow: visible !important;
+}
+/* Section box styling */
+.custom-section-box {
+    border: 1px solid #d8dde6;
+    border-radius: 0.25rem;
+    background-color: #ffffff;
+    margin-bottom: 1rem;
+}
+
+/* Section title styling */
+.custom-section-title {
+    background-color: #e0e5ee;
+    padding: 0.5rem;
+    font-weight: bold;
+    margin: -0.5rem -0.5rem 0.5rem -0.5rem;
+    font-size: 1rem;
+}
+
+/* Required field indicator */
+.custom-required {
+    color: #c23934;
+    font-size: 0.75rem;
+    margin-left: 0.5rem;
+}
+
+/* Subheader styling */
+.custom-subheader {
+    font-size: 0.875rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+/* Note text styling */
+.custom-note {
+    color: #706e6b;
+    font-size: 0.75rem;
+    margin-top: 0.25rem;
+}
+
+/* Input field styling */
+.slds-input {
+    border-radius: 0;
+    border-color: #d8dde6;
+}
+
+/* Button styling */
+.slds-button_neutral {
+    background-color: #e0e0e0;
+    color: #000000;
+}
+
+/* .slds-button_brand {
+    background-color: #0070d2;
+    color: #ffffff;
+} */
+
+/* Form row spacing */
+.form-row {
+    margin-bottom: 0;
+}
+
+/* Lightning-input-field padding adjustment */
+.form-row .slds-p-around_x-small {
+    padding-top: 0.125rem;
+    padding-bottom: 0.125rem;
+}
+
+/* Address fields city and state in one row */
+.slds-gutters {
+    margin-left: -8px;
+    margin-right: -8px;
+}
+
+.slds-gutters .slds-col {
+    padding-left: 8px;
+    padding-right: 8px;
+}
+
+/* Label and static text styling */
+.slds-col label {
+    display: block;
+    font-size: 0.75rem;
+    color: #706e6b;
+    margin-bottom: 0.25rem;
+}
+
+.slds-col p {
+    min-height: 32px;
+    padding-top: 0.25rem;
+}
+
+/* Datatable styling */
+.available-products-table {
+    height: 300px;
+    display: block;
+}
+
+.opportunity-product-table {
+    height: 170px;
+    display: block;
+}
+
+/* Non-editable column styling */
+.non-editable-column {
+    background-color: #f5f5f5;
+    text-align: center !important;
+}
+
+/* Table container styling */
+.container {
+    display: flex;
+    flex-direction: column;
+    margin: -0.75rem 0 -0.75rem 0;
+    overflow: hidden;
+}
+
+/* Table cell styling */
+span, .formatted {
+    display: flex;
+    min-height: 50px;
+    justify-content: center;
+    align-items: center;
+}
+
+td,
+th {
+    border-right: 0.5px solid #c9c9c9;
+    border-bottom: 0;
+    border-top: 0;
+}
+
+th {
+    font-size: small;
+}
+
+td:first-child,
+th:first-child {
+    border-left: 0.5px solid #c9c9c9;
+}
+
+/* Sticky table header */
+thead {
+    /* position: sticky !important; */
+    top: 0 !important;
+    width: 100% !important;
+    /* z-index: 9999 !important; */
+}
+
+/* Table column widths */
+.slds-table th:nth-child(1),
+.slds-table td:nth-child(1) {
+    width: 40px;
+    min-width: 40px;
+    max-width: 40px;
+    padding: 0 4px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.slds-table th:nth-child(2),
+.slds-table td:nth-child(2) {
+    width: 180px;
+    min-width: 180px;
+    max-width: 180px;
+    padding: 0 6px;
+    text-align: left;
+    vertical-align: middle;
+}
+
+.slds-table th:nth-child(3),
+.slds-table td:nth-child(3) {
+    width: 450px;
+    min-width: 450px;
+    max-width: 450px;
+    padding: 0 6px;
+    text-align: left;
+    vertical-align: middle;
+    word-wrap: break-word;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-wrap: wrap;
+}
+
+.slds-table th:nth-child(4),
+.slds-table td:nth-child(4) {
+    width: 80px;
+    min-width: 80px;
+    /* max-width: 80px; */
+    padding: 0 4px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.slds-table th:nth-child(5),
+.slds-table td:nth-child(5) {
+    width: 80px;
+    min-width: 80px;
+    /* max-width: 80px; */
+    padding: 0 4px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.slds-table th:nth-child(6),
+.slds-table td:nth-child(6) {
+    width: 50px;
+    min-width: 50px;
+    max-width: 50px;
+    padding: 0 4px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.slds-table th:nth-child(7),
+.slds-table td:nth-child(7) {
+    width: 70px;
+    min-width: 70px;
+    max-width: 70px;
+    padding: 0 4px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.slds-table th:nth-child(8),
+.slds-table td:nth-child(8) {
+    width: 80px;
+    min-width: 80px;
+    /* max-width: 80px; */
+    padding: 0 4px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.slds-table th:nth-child(9),
+.slds-table td:nth-child(9) {
+    width: 100px;
+    min-width: 100px;
+    /* max-width: 100px; */
+    padding: 0 4px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.slds-table th:nth-child(10),
+.slds-table td:nth-child(10) {
+    width: 40px;
+    min-width: 40px;
+    max-width: 40px;
+    padding: 0 4px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.slds-table th:nth-child(11),
+.slds-table td:nth-child(11) {
+    width: 60px;
+    min-width: 60px;
+    max-width: 60px;
+    padding: 0 4px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+/* Ensure table is responsive */
+.slds-table {
+    width: 100%;
+    table-layout: auto;
+}
+
+/* Description column styling */
+.description-column,
+.description-cell {
+    word-wrap: break-word;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-wrap: wrap;
+}
+
+td {
+    cursor: pointer;
+}
+
+tbody > tr:nth-child(3) {
+    cursor: auto;
+}
+
+/* Input styling */
+.input {
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 5px;
+}
+
+/* Button group styling */
+.slds-button-group lightning-button-icon {
+    width: 24px;
+    height: 24px;
+    /* --slds-c-button-icon-color-foreground: #0070d2; */
+    --slds-c-button-icon-color-background: transparent;
+    transition: transform 0.2s, background-color 0.2s;
+    margin: 2px;
+    box-sizing: border-box;
+}
+
+.slds-button-group lightning-button-icon:hover,
+.slds-button-group lightning-button-icon:focus {
+    --slds-c-button-icon-color-background: #f3f3f3;
+    transform: scale(1.1);
+}
+
+.slds-button-group {
+    display: flex;
+    flex-direction: row;
+    gap: 6px;
+    justify-content: center;
+    align-items: center;
+    padding: 2px;
+}
+
+/* Accordion styling */
+lightning-accordion {
+    margin-top: 1rem;
+}
+
+lightning-accordion-section {
+    margin-bottom: 0.5rem;
+}
+
+lightning-accordion-section .slds-accordion__summary {
+    background-color: #e0e5ee;
+    padding: 0.5rem;
+    font-weight: bold;
+}
+
+lightning-accordion-section .slds-accordion__content {
+    padding: 0.5rem;
+}
+
+/* Review comment modal styling */
+.review-comment-modal {
+    animation: fadeIn 0.3s ease-out;
+}
+.slds-modal__container {
+    width: 40rem;
+    /* max-width: 90%; */
+    margin: 0 auto;
+    z-index: 2001; /* Above the backdrop */
+}
+.slds-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5); /* Standard overlay color */
+    z-index: 1999; /* Below the modal but above other content */
+}
+.review-comment-modal .slds-modal__container {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.16);
+    border-radius: 0.25rem;
+}
+
+.review-comment-modal .slds-modal__header {
+    border-bottom: 1px solid #ececec;
+    padding: 1rem 1.5rem;
+}
+
+.review-comment-modal .slds-modal__content {
+    background: #ffffff;
+    border-radius: 0.25rem;
+    margin: 0.5rem;
+}
+
+.review-comment-modal .slds-modal__footer {
+    border-top: 1px solid #ececec;
+    padding: 0.75rem 1rem;
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+}
+
+.review-comment-modal .slds-button {
+    transition: all 0.2s ease;
+}
+
+.review-comment-modal .slds-button:hover {
+    transform: translateY(-1px);
+}
+
+.review-comment-modal .slds-textarea {
+    border: 1px solid #d8dde6;
+    border-radius: 0.25rem;
+    transition: border-color 0.2s ease;
+}
+/* 
+.review-comment-modal .slds-textarea:focus {
+    border-color: #1589ee;
+    box-shadow: 0 0 3px #0070d2;
+} */
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Sticky container for header and progress indicator */
+:host {
+    --sticky-z-index: 100;
+}
+
+.sticky-container {
+    width: 100%;
+    position: sticky;
+    top: 0;
+    z-index: var(--sticky-z-index);
+    background: #fff;
+}
+
+/* Ensure header and progress indicator stack correctly */
+.sticky-header,
+.sticky-path {
+    width: 100%;
+}
+
+/* Arrow buttons for move up/down */
+.arrow-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.arrow-icon {
+    margin: 2px 0;
+    --slds-c-icon-color-foreground-default: #5c5c5c;
+    --slds-c-button-icon-color-background: transparent;
+}
+.quote-line-item-table {
+    height: 170px;
+    display: block;
+}
+
+.available-products-table {
+    height: 300px;
+    display: block;
+}
+.slds-path__link,
+.slds-path__link:hover,
+.slds-path__link:focus,
+.slds-path__link:active {
+    cursor: default !important;
+    pointer-events: none !important;
+    color: inherit !important;
+    background-color: transparent !important;
+    text-decoration: none !important;
+}
+.slds-path__item:hover .slds-path__link,
+.slds-path__item:focus .slds-path__link {
+    color: inherit !important;
+    background-color: transparent !important;
+    text-decoration: none !important;
+}
+/* Responsive adjustments for smaller screens */
+
+.custom-nested-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000; /* above main backdrop (usually 1040) but below modal content (1060) */
+}
+/* Table container styling */
+.table-container {
+    max-height: 300px; /* Adjust height as needed */
+    overflow-y: auto; /* Enable vertical scrolling */
+    overflow-x: auto; /* Enable horizontal scrolling if needed */
+    position: relative; /* Ensure sticky positioning works relative to this container */
+    width: 100%;
+}
+
+/* Sticky table header */
+.sticky-table-header {
+    position: sticky;
+    top: 0;
+    background: #f3f2f2; /* Match SLDS table header background */
+    z-index: 10; /* Ensure header stays above table body */
+}
+
+/* Ensure table header cells align with body cells */
+.slds-table th,
+.slds-table td {
+    padding: 0.5rem;
+    vertical-align: middle;
+    text-align: center;
+}
+
+/* Optional: Improve header appearance */
+.slds-table th {
+    font-weight: bold;
+    font-size: small;
+    border-bottom: 1px solid #c9c9c9;
+}
+
+/* Ensure table is responsive */
+.slds-table {
+    width: 100%;
+    table-layout: auto;
+    border-collapse: collapse;
+}
+
+/* Maintain existing column widths */
+.slds-table th:nth-child(1),
+.slds-table td:nth-child(1) {
+    width: 40px;
+    min-width: 40px;
+    max-width: 40px;
+}
+
+.slds-table th:nth-child(2),
+.slds-table td:nth-child(2) {
+    width: 180px;
+    min-width: 180px;
+    max-width: 180px;
+}
+
+.slds-table th:nth-child(3),
+.slds-table td:nth-child(3) {
+    width: 450px;
+    min-width: 450px;
+    max-width: 450px;
+}
+.quick-actions-panel{
+    overflow-y: hidden !important; 
+}
+
+.slds-modal__header .slds-modal__content {
+    max-height: none !important;
+}

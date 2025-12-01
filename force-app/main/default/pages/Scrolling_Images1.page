@@ -1,0 +1,10 @@
+<apex:page >
+<marquee behavior="scroll" direction="left">
+<apex:image value="{!$Resource.IMG11}"/>
+<apex:image value="{!$Resource.IMG12}"/>
+<apex:image value="{!$Resource.IMG13}"/>
+<apex:image value="{!$Resource.IMG14}"/>
+<apex:image value="{!$Resource.IMG15}"/>
+<apex:image value="{!$Resource.IMG16}"/>
+</marquee>
+</apex:page>

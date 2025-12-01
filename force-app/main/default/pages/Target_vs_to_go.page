@@ -1,0 +1,10 @@
+<apex:page showheader="false" sidebar="false">
+<apex:outputPanel id="SalesfunnelDashboard" >
+     <script>
+     window.open="https://invixium.my.salesforce.com/01Z15000001A07D?isdtp=vw",
+  '_blank';
+   
+       
+     </script>
+     </apex:outputPanel>
+</apex:page>

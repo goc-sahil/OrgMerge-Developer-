@@ -1,0 +1,147 @@
+<template>
+    <lightning-card style="margin: 0 !important; padding:0 !important">
+        <div class="container">
+            <header class="header">
+                <h2>Edit All Quote Line Items</h2>
+            </header>
+            <section class="content">
+                <template if:true={isLoading}>
+                    <lightning-spinner alternative-text="Loading" size="medium" variant="brand"></lightning-spinner>
+                </template>
+                <template if:false={isLoading}>
+                    <table class="slds-table slds-table_bordered slds-table_cell-buffer" style="height: 340px; overflow: auto;">
+                        <thead>
+                            <tr>
+                                <th class="slds-text-title productname">Product Name</th>
+                                <th class="slds-text-title description-column">Product Description</th>
+                                <th class="slds-text-title">List Price</th>
+                                <th class="slds-text-title">Proposed Price</th>
+                                <th class="slds-text-title">Quantity</th>
+                                <th class="slds-text-title">Discount (%)</th>
+                                <th class="slds-text-title">Sales Price</th>
+                                <th class="slds-text-title">Total Price</th>
+                                <template if:false={noData}>
+                                    <th class="slds-text-title"></th>
+                                </template>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <template lwc:if={noData}>
+                                <tr>
+                                    <td colspan="7" style="border: none;">
+                                        <H3>No items to display.</H3>
+                                    </td>
+                                </tr>
+                            </template>
+                            <template lwc:else>
+                                <template for:each={quoteItems} for:item="item">
+                                    <tr key={item.id}>
+                                        <td class="description-cell">
+                                            <template if:true={item.isEditingProductName}>
+                                                <lightning-input type="text" value={item.productName} data-id={item.id}
+                                                    data-field="productName" onchange={handleInputChange}
+                                                    onblur={toggleEditMode} class="productname"></lightning-input>
+                                            </template>
+                                            <template if:false={item.isEditingProductName}>
+                                                <span class="productname" data-id={item.id} data-field="productName"
+                                                    onclick={toggleEditMode}>{item.productName}</span>
+                                            </template>
+                                        </td>
+                                        <td class="description-cell">
+                                            <template if:true={item.isEditingProductDescription}>
+                                                <lightning-textarea value={item.productDescription} data-id={item.id}
+                                                    data-field="productDescription" onchange={handleInputChange}
+                                                    onblur={toggleEditMode} class="description-column"></lightning-textarea>
+                                            </template>
+                                            <template if:false={item.isEditingProductDescription}>
+                                                <span data-id={item.id} data-field="productDescription" onclick={toggleEditMode}
+                                                    class="description-column">{item.productDescription}</span>
+                                            </template>
+                                        </td>
+                                        <td style="text-align:center !important;">
+                                            <span>{item.currency}&nbsp;<lightning-formatted-number value={item.listPrice} maximum-fraction-digits="2"></lightning-formatted-number></span>
+                                        </td>
+                                        <td>
+                                            <template if:true={item.isEditingSalesPrice}>
+                                                <lightning-input type="number" value={item.salesPrice} data-id={item.id}
+                                                    data-field="salesPrice" onchange={handleInputChange}
+                                                    onblur={toggleEditMode}></lightning-input>
+                                            </template>
+                                            <template if:false={item.isEditingSalesPrice}>
+                                                <div class="formatted" data-id={item.id} data-field="salesPrice" onclick={toggleEditMode}>
+                                                    {item.currency}&nbsp;<lightning-formatted-number value={item.salesPrice} data-id={item.id} data-field="salesPrice"  maximum-fraction-digits="2"></lightning-formatted-number>
+                                                </div>
+                                            </template>
+                                        </td>
+                                        <td>
+                                            <template if:true={item.isEditingQuantity}>
+                                                <lightning-input type="number" value={item.quantity} data-id={item.id}
+                                                    data-field="quantity" onchange={handleInputChange}
+                                                    onblur={toggleEditMode}></lightning-input>
+                                            </template>
+                                            <template if:false={item.isEditingQuantity}>
+                                                <span data-id={item.id} data-field="quantity" class="focus"
+                                                    onclick={toggleEditMode}>{item.quantity}</span>
+                                            </template>
+                                        </td>
+                                        <td>
+                                            <template if:true={item.isEditingDiscount}>
+                                                <lightning-input type="number" value={item.discount} data-id={item.id}
+                                                    data-field="discount" onchange={handleInputChange}
+                                                    onblur={toggleEditMode} onfocusout={validation}></lightning-input>
+                                            </template>
+                                            <template if:false={item.isEditingDiscount}>
+                                                <span data-id={item.id} data-field="discount"
+                                                    onclick={toggleEditMode}>{item.discount}</span>
+                                            </template>
+                                        </td>
+                                        <td>
+                                            <span data-id={item.actualprice} data-field="actualprice">{item.currency}&nbsp;<lightning-formatted-number value={item.actualprice} maximum-fraction-digits="2"></lightning-formatted-number></span>
+                                        </td>
+                                        <td>
+                                            <span data-id={item.totalPrice} data-field="totalPrice">{item.currency}&nbsp;<lightning-formatted-number value={item.totalPrice} maximum-fraction-digits="2"></lightning-formatted-number></span>
+                                            <!-- <lightning-input type="text" value={item.totalPrice} readonly
+                                                class="input"></lightning-input> -->
+                                        </td>
+                                        <td>
+                                            <div class="dropdown-container" onclick={toggleDropdown}>
+                                                <lightning-button-icon icon-name="utility:threedots_vertical" size="medium"
+                                                    alternative-text="More" title="More" data-id={item.id}>
+                                                </lightning-button-icon>
+                                                <!-- if user click on more button than following dropdown will opens -->
+                                                <template if:true={item.isDropdownOpen}>
+                                                    <div class="slds-dropdown slds-dropdown_right slds-dropdown_actions">
+                                                        <ul class="slds-dropdown__list" role="menu">
+                                                            <li class="slds-dropdown__item" role="presentation">
+                                                                <a role="menuitem" tabindex="0" data-id={item.id} onclick={handleDelete}>
+                                                                    <lightning-icon icon-name="utility:delete" size="x-small"
+                                                                        class="slds-m-right_x-small"></lightning-icon>
+                                                                    Delete
+                                                                </a>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                    
+                                                </template>
+                    
+                                            </div>
+                                            <!-- <lightning-button-menu alternative-text="Actions" icon-name="utility:down" variant="border-filled">
+                                                <lightning-menu-item class="slds-dropdown slds-dropdown_right" label="Delete" data-id={item.id} onclick={handleDelete}></lightning-menu-item>
+                                            </lightning-button-menu> -->
+                                        </td>
+                                    </tr>
+                                </template>
+                            </template>
+                            
+                        </tbody>
+                    </table>
+                </template>
+            </section>
+            <footer class="footer">
+                <!-- <lightning-icon icon-name="utility:error"></lightning-icon> -->
+                <lightning-button style="margin-right: 10px;" label="Cancel" title="Cancel" onclick={closeAction}></lightning-button>
+                <lightning-button label="Save" variant="brand" onclick={handleSave}></lightning-button>
+            </footer>
+        </div>
+    </lightning-card>
+</template>

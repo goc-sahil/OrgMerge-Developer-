@@ -1,0 +1,93 @@
+<apex:component >
+<apex:attribute name="StageName" type="string" required="true" description="What stage is the quote"/>
+<apex:outputPanel rendered="{!StageName == 'Interested'}">
+<table style="width:100%;">
+    <tr style="width:100%;">
+        <td align="middle" style="width:100%;">
+            <img src="{!$Resource.Interested}" />
+        </td>
+    </tr>
+</table>
+</apex:outputPanel>
+<apex:outputPanel rendered="{!StageName == 'Quote'}">
+<table style="width:100%;">
+    <tr style="width:100%;">
+        <td align="middle" style="width:100%;">
+            <img src="{!$Resource.Quote}" />
+        </td>
+    </tr>
+</table>
+</apex:outputPanel>
+<apex:outputPanel rendered="{!StageName == 'RGT Confidence 1'}">
+<table style="width:100%;">
+    <tr style="width:100%;">
+        <td align="middle" style="width:100%;">
+            <img src="{!$Resource.RGTConfidence1}" />
+        </td>
+    </tr>
+</table>
+</apex:outputPanel>
+<apex:outputPanel rendered="{!StageName == 'RGT Confidence 2'}">
+<table style="width:100%;">
+    <tr style="width:100%;">
+        <td align="middle" style="width:100%;">
+            <img src="{!$Resource.RGTConfidence2}" />
+        </td>
+    </tr>
+</table>
+</apex:outputPanel>
+<apex:outputPanel rendered="{!StageName == 'PO Received'}">
+<table style="width:100%;">
+    <tr style="width:100%;">
+        <td align="middle" style="width:100%;">
+            <img src="{!$Resource.POReceived}" />
+        </td>
+    </tr>
+</table>
+</apex:outputPanel>
+<apex:outputPanel rendered="{!StageName == 'Verbal Commitment'}">
+<table style="width:100%;">
+    <tr style="width:100%;">
+        <td align="middle" style="width:100%;">
+            <img src="{!$Resource.VerbalCommitment}" />
+        </td>
+    </tr>
+</table>
+</apex:outputPanel>
+<apex:outputPanel rendered="{!StageName == 'Cash Received/Terms'}">
+<table style="width:100%;">
+    <tr style="width:100%;">
+        <td align="middle" style="width:100%;">
+            <img src="{!$Resource.CashRecieved}" />
+        </td>
+    </tr>
+</table>
+</apex:outputPanel>
+<apex:outputPanel rendered="{!StageName == 'Shipped'}">
+<table style="width:100%;">
+    <tr style="width:100%;">
+        <td align="middle" style="width:100%;">
+            <img src="{!$Resource.Shipped}" />
+        </td>
+    </tr>
+</table>
+</apex:outputPanel>
+<apex:outputPanel rendered="{!StageName == 'Blue Bird'}">
+<table style="width:100%;">
+    <tr style="width:100%;">
+        <td align="middle" style="width:100%;">
+            <img src="{!$Resource.BlueBird}" />
+        </td>
+    </tr>
+</table>
+</apex:outputPanel>
+<apex:outputPanel rendered="{!StageName == 'Closed Lost'}">
+<table style="width:100%;">
+    <tr style="width:100%;">
+        <td align="middle" style="width:100%;">
+            <img src="{!$Resource.ClosedLost}" />
+        </td>
+    </tr>
+</table>
+</apex:outputPanel>
+</apex:component>

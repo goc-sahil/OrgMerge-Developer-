@@ -1,0 +1,14 @@
+<apex:page id="page" standardController="Opportunity">
+    <script type="text/javascript">
+        if({!$CurrentPage.parameters.conrel} == '1'){
+            location.replace('/006/e?nooverride=1&lookupcmpgn=1&accid={!$CurrentPage.parameters.accid}&conid={!$CurrentPage.parameters.conid}&retURL={!$CurrentPage.parameters.retURL}');
+        }
+    </script>
+    <apex:pageMessage severity="ERROR"
+        strength="3"
+        title="Error: Opportunities have to be created from the Contact page."
+        escape="false"
+        summary="Please use the <b>Opportunities Related List</b> on the <b>Contact</b> page to create new <b>Opportunities</b>."
+        rendered="{! IF(OR($CurrentPage.parameters.conrel = '0',$CurrentPage.parameters.conrel = ''), TRUE, FALSE) }" >
+    </apex:pageMessage>
+</apex:page>

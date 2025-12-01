@@ -1,0 +1,116 @@
+/**
+ * Custom styles for Quote Line Reorder component
+ */
+
+/* Child row styling with indentation */
+.child-row {
+    background-color: #f3f3f3;
+}
+
+.child-row:hover {
+    background-color: #e8e8e8;
+}
+
+/* Modal sizing */
+.slds-modal_large {
+    max-width: 90rem;
+}
+
+/* Table header styling */
+.slds-table thead th {
+    background-color: #f3f3f3;
+    font-weight: 700;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+/* Button group spacing */
+lightning-button-group {
+    display: flex;
+    gap: 0.25rem;
+}
+
+/* Disabled button styling */
+lightning-button-icon[disabled] {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+/* Loading overlay */
+lightning-spinner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* Table row hover effect */
+.slds-table tbody tr:hover {
+    background-color: #f3f3f3;
+}
+
+.slds-table tbody tr.child-row:hover {
+    background-color: #e0e0e0;
+}
+
+/* Truncate text in cells */
+.slds-truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Icon alignment */
+lightning-icon {
+    vertical-align: middle;
+}
+
+/* Scrollable content area */
+.slds-scrollable_y {
+    overflow-y: auto;
+    border: 1px solid #dddbda;
+    border-radius: 0.25rem;
+}
+
+/* Modal content padding */
+.slds-modal__content {
+    min-height: 300px;
+    position: relative;
+}
+
+/* Action column alignment */
+td[data-label="Actions"] {
+    text-align: center;
+}
+
+/* Bundle icon styling */
+tr td:first-child lightning-icon {
+    margin-right: 0.25rem;
+}
+
+/* Child row indentation */
+.slds-m-left_xx-large {
+    margin-left: 2rem;
+}
+
+/* Ensure consistent spacing */
+.slds-button-group-row {
+    display: inline-flex;
+}
+
+/* Parent row emphasis */
+tr:not(.child-row) td {
+    font-weight: 500;
+}
+
+/* Responsive table behavior */
+@media (max-width: 768px) {
+    .slds-modal_large {
+        max-width: 100%;
+    }
+    
+    .slds-scrollable_y {
+        max-height: 50vh !important;
+    }
+}

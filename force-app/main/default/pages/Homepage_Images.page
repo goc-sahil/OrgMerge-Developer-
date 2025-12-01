@@ -1,0 +1,10 @@
+<apex:page title="Intersec 2017 - Day 1" >
+<apex:outputText style="font-style:italic" value="Intersec 2017 - Day 1">
+<br/>
+<apex:image value="{!$Resource.IMG1}"/>
+<apex:image value="{!$Resource.IMG2}"/>
+<apex:image value="{!$Resource.IMG3}"/>
+<apex:image value="{!$Resource.IMG4}"/>
+<apex:image value="{!$Resource.IMG5}"/>
+</apex:outputText>
+</apex:page>

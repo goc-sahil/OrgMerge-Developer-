@@ -1,0 +1,32 @@
+<template>
+    <div class="slds-card">
+        <div class="slds-media__figure">
+            <svg width="20" height="20" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect width="36" height="36" rx="18" fill="#0250D9" />
+                <path
+                    d="M18 8.03125C15.356 8.03125 12.8203 9.08158 10.9507 10.9512C9.08109 12.8208 8.03076 15.3565 8.03076 18.0005C8.03076 20.6445 9.08109 23.1802 10.9507 25.0498C12.8203 26.9194 15.356 27.9697 18 27.9697C20.644 27.9697 23.1797 26.9194 25.0493 25.0498C26.9189 23.1802 27.9692 20.6445 27.9692 18.0005C27.9692 15.3565 26.9189 12.8208 25.0493 10.9512C23.1797 9.08158 20.644 8.03125 18 8.03125ZM18 13.0574C18.7061 13.0574 19.2461 13.5974 19.2461 14.3036C19.2461 15.0097 18.7061 15.5497 18 15.5497C17.2938 15.5497 16.7538 15.0097 16.7538 14.3036C16.7538 13.5974 17.2938 13.0574 18 13.0574ZM20.0769 21.7805C20.0769 21.9882 19.9108 22.1543 19.6615 22.1543H16.3385C16.1308 22.1543 15.9231 22.0297 15.9231 21.7805V20.9497C15.9231 20.742 16.0892 20.4928 16.3385 20.4928C16.5461 20.4928 16.7538 20.3682 16.7538 20.1189V18.4574C16.7538 18.2497 16.5877 18.0005 16.3385 18.0005C16.1308 18.0005 15.9231 17.8759 15.9231 17.6266V16.7959C15.9231 16.5882 16.0892 16.3389 16.3385 16.3389H18.8308C19.0385 16.3389 19.2461 16.5466 19.2461 16.7959V20.1189C19.2461 20.3266 19.4123 20.4928 19.6615 20.4928C19.8692 20.4928 20.0769 20.7005 20.0769 20.9497V21.7805Z"
+                    fill="white" />
+            </svg>
+        </div>
+        <p class="slds-card__header-title modal-title">Quote Information</p>
+        <div class="info-container">
+            <span class="info-label">Quote:</span>
+            <span class="info-value">{quoteName}</span>
+            <span class="info-label">Account:</span>
+            <span class="info-value">{accountName}</span>
+            <span class="info-label">Price Book:</span>
+            <span class="info-value">{pricebookName}</span>
+            <template if:true={showTotalPrice}>
+                <div class="total-price-container">
+                    <span class="info-label">Total Price:</span>
+                    <span class="info-value">{currency} <!-- Space added here -->
+                        <lightning-formatted-number 
+                            value={totalPrice} 
+                            maximum-fraction-digits="2">
+                        </lightning-formatted-number>
+                    </span>
+                </div>
+            </template>
+        </div>
+    </div>
+</template>

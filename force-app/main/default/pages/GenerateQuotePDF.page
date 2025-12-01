@@ -1,0 +1,527 @@
+<apex:page Controller="GenerateQuotePDFCtrl"  readOnly="advanced_pdf" applyHtmlTag="false" applyBodyTag="false" standardStylesheets="false"
+           sidebar="false" showHeader="false" cache="false" renderAs="advanced_pdf" docType="html-5.0" >
+           <!-- <apex:page Controller="GenerateQuotePDFCtrl"  readOnly="advanced_pdf" applyHtmlTag="false" applyBodyTag="false" standardStylesheets="false"
+           sidebar="false" showHeader="false" cache="false"  docType="html-5.0" >
+      -->
+    <html>
+        <head>
+            <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans&amp;display=swap"/>
+            <style>
+                @page{
+                margin-top: 1.8in;
+                margin-right:0.40in;
+                margin-left:0.40in;
+                margin-bottom: 0.4in;
+                padding:0;
+                }
+                @page
+                {
+                size: A4 Landscape ;
+                @top-center{
+                content: element(header);
+                }
+                @bottom-center {
+                content: element(footer);
+                }
+                @bottom-left {
+                content: element(page);
+                } 
+         
+                }
+                div.header {
+                position: running(header);
+                }
+                div.footer 
+                {
+                position: running(footer);
+                }
+                .pagenumber:before 
+                {
+                content: counter(page);
+                }
+                .pagecount:before 
+                {
+                content: counter(pages);
+                }
+                .subHeaderTh{   
+                    
+                    font-weight: bold;
+                    text-align: right;
+                    width:12%;
+                    margin-bottom: -50px;
+                }
+                .subHeaderTd{
+                    
+                    text-align: left;
+                    color: #a09999;
+                    margin-bottom: -50px;
+                }
+                .qtlHeader{
+                    
+                    font-weight: bold;
+                    
+                }
+                .containerTd{
+                    vertical-align: top;
+                    padding-top: 10px;
+                }
+                @page second-page {
+                    size: A4 landscape;
+                    margin: 0;
+                }
+
+                .second-page {
+                    width: 100%;
+                    
+                    box-sizing: border-box;
+                    page-break-before: always;
+                }
+                .second-page .footer {
+                    text-align: center;
+                    font-size: 12px;
+                    color: #999;
+                }
+                div,p, a, h1, h2, h3, h4, h5, h6, span, table, tr, td, th{font-family: 'Open Sans', Arial Unicode MS;}
+                .main-table, .address-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+        .main-table th, .main-table td, .address-table th, .address-table td {
+            padding: 5px;
+        }
+        .subHeaderTh {
+            font-weight: bold;
+        }
+        .subHeaderTd {
+            color: #a09999;
+        }
+        .address-table th {
+            text-align: left;
+            vertical-align: top;
+        }
+        p span { 
+            display: block; 
+            margin: 0px;
+        } 
+            </style>
+            
+        </head>
+        <body style="margin:0; padding:0px;">
+            <div class="footer" style="text-align:center; color:#a09999; font-size:10px;">
+                <hr></hr>
+                <apex:outputPanel rendered="{!showInidanAddress}">
+                    invixium.com | 2nd Floor – Elanza Vertex, Sindhu Bhavan Road, Ahmedabad, Gujarat - 380059 | order@invixium.com
+                </apex:outputPanel>
+                <apex:outputPanel rendered="{! !showInidanAddress}">
+                    invixium.com | 111 Gordon Baker Road, Suit 300, Toronto ON M2H 3R1, Canada | order@invixium.com
+                </apex:outputPanel>
+                    <br/>
+                    <b style="color:#999; font-size:10px; margin:0;">
+                        <span class="pagenumber" /> of
+                        <span class="pagecount" />
+                    </b>
+            </div>
+            <div>
+                <div class="header">
+                    <table border="0" cellpadding="0" cellspacing="0" style="width:100%; border:1px solid #000; margin-top:0px; border-collapse:collapse;">
+                        <tr>
+                            <td style="font-size:40px; font-weight:bold;vertical-align: bottom;">
+                                <apex:outputText value="Sales Quotation" rendered="{!objectName=='isQuote'}" />
+                            </td>
+                            <td>
+                                <table cellpadding="0" cellspacing="0" style="width:100%; border-collapse:collapse; font-size:10px; border-top:1px solid #000;"> 
+                                    <tr style="border-left:0.5px solid #000;">
+                                        <td style="text-align: right;">
+                                            <apex:image url="{!$Resource.InvixiumLogo}" width="88px" height="145.34px"/><br/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>&nbsp;&nbsp;&nbsp;</td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+           
+
+            <br></br>
+            <br></br>
+            <div class="SubHeader" style="text-align: center;">
+                <!-- <table class="main-table">
+                    <tr>
+                        <th class="subHeaderTh">Quotation #</th>
+                        <td class="subHeaderTd">{!quote.QuoteNumberConstant}</td>
+                        <th class="subHeaderTh">Date</th>
+                        <td class="subHeaderTd">
+                            <apex:outputText value="{0,date,dd MMM yyyy}">
+                                <apex:param value="{!quote.CreatedDate}" />
+                            </apex:outputText>
+                        </td>
+                        <th class="subHeaderTh" style="">Bill To</th>
+                        <td class="subHeaderTd" rowspan="3" style="text-align:left; width: 370px;">
+                            <p style="margin: 0 0 5px 0;">
+                                <span>{!quote.BillToName}</span>
+                                <span>{!quote.BillingStreet}</span>
+                                <span>{!quote.BillingCity}, {!quote.BillingState}, {!quote.BillingPostalCode}</span>
+                                <span>{!quote.BillingCountry}</span>
+                            </p>
+                           
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="subHeaderTh">Customer ID</th>
+                        <td class="subHeaderTd">{!quote.CustomerNumber}</td>
+                        <th class="subHeaderTh">Expiry Date</th>
+                        <td class="subHeaderTd">
+                            <apex:outputText value="{0,date,dd MMM yyyy}">
+                                <apex:param value="{!quote.ExpirationDate}" />
+                            </apex:outputText>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="subHeaderTh">Customer Tax ID</th>
+                        <td class="subHeaderTd">{!quote.TaxIdNumber}</td>
+                        <th class="subHeaderTh">Payment Terms</th>
+                        <td class="subHeaderTd">{!quote.PaymentTerms}</td>
+                    </tr>
+                    <tr>
+                        <th class="subHeaderTh"></th>
+                        <td class="subHeaderTd"></td>
+                        <th class="subHeaderTh">Incoterms</th>
+                        <td class="subHeaderTd">{!quote.Incoterms}</td>
+                        <th class="subHeaderTh" style="">Ship To</th>
+                        <td class="subHeaderTd" rowspan="3" style="text-align:left; width: 370px;">
+                        <p style="margin:0 0 5px 0;">
+                            <span>{!quote.ShipToName}</span>
+                            <span>{!quote.ShippingStreet}</span>
+                            <span>{!quote.ShippingCity}, {!quote.ShippingState}, {!quote.ShippingPostalCode}</span>
+                            <span>{!quote.ShippingCountry}</span>
+                        </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th class="subHeaderTh"></th>
+                        <td class="subHeaderTd"></td>
+                        <th class="subHeaderTh">Attention</th>
+                        <td class="subHeaderTd">
+                            
+                                <p style="margin: 20px 0px 0px 0px;">{!quote.ContactName}</p>
+                                <p style="margin:0px">{!quote.ContactEmail}</p>
+                                    <p style="margin:0px">{!quote.ContactPhone}</p>
+                           
+                        </td>
+                    </tr>
+                   
+                </table> -->
+                <table border="0" cellpadding="0" cellspacing="0" style="width:100%; border:1px solid #000;
+                border-collapse:collapse; font-size:14px;">
+                <tr>
+                    <th class="subHeaderTh">Quotation #</th>
+                    <td class="subHeaderTd">&nbsp;&nbsp;&nbsp;{!quote.QuoteNumberConstant}</td>
+                    <th class="subHeaderTh">Date</th>
+                    <td class="subHeaderTd">&nbsp;&nbsp;&nbsp;<apex:outputText value="{0,date,dd MMM yyyy}">
+                        <apex:param value="{!quote.CreatedDate}" />
+                    </apex:outputText></td>
+                    <th class="subHeaderTh" style="text-align:Center">Bill To</th>
+                    <td class="subHeaderTd" style="text-align:left; width: 32%;">{!quote.BillToName}</td>
+                </tr>
+                <tr>
+                    <th>&nbsp;</th>
+                    <td class="subHeaderTd"></td>
+                    <th class="subHeaderTh"></th>
+                    <td class="subHeaderTd"></td>
+                    <th class="subHeaderTh"></th>
+                    <td class="subHeaderTd" style="text-align:left; width: 32%;">{!quote.BillingStreet}</td>
+                </tr>
+                <tr>
+                    <th class="subHeaderTh">Customer ID</th>
+                    <td class="subHeaderTd">&nbsp;&nbsp;&nbsp;{!quote.CustomerNumber}</td>
+                    <th class="subHeaderTh">Expiry Date</th>
+                    <td class="subHeaderTd">&nbsp;&nbsp;&nbsp;<apex:outputText value="{0,date,dd MMM yyyy}">
+                        <apex:param value="{!quote.ExpirationDate}" />
+                    </apex:outputText></td>
+                    <th class="subHeaderTh"></th>
+                    <td class="subHeaderTd" style="text-align:left; width: 32%;">{!quote.BillingCity} <apex:outputPanel rendered="{!showState}">, {!quote.BillingState} </apex:outputPanel>,{!quote.BillingPostalCode}</td>
+                </tr>
+                <tr>
+                    <th>&nbsp;</th>
+                    <td class="subHeaderTd"></td>
+                    <th class="subHeaderTh"></th>
+                    <td class="subHeaderTd"></td>
+                    <th class="subHeaderTh"></th>
+                    <td class="subHeaderTd" style="text-align:left; width: 32%;">{!quote.BillingCountry}</td>
+                </tr>
+                <tr>
+                    <th class="subHeaderTh">Customer Tax ID</th>
+                    <td class="subHeaderTd">&nbsp;&nbsp;&nbsp;{!quote.TaxIdNumber}</td>
+                    <th class="subHeaderTh">Payment Terms</th>
+                    <td class="subHeaderTd">&nbsp;&nbsp;&nbsp;{!quote.PaymentTerms}</td>
+                    <th class="subHeaderTh"></th>
+                    <td class="subHeaderTd"></td>
+                </tr>
+                <tr>
+                    <th>&nbsp;</th>
+                </tr>
+                <tr>
+                    <th class="subHeaderTh"></th>
+                    <td class="subHeaderTd">&nbsp;&nbsp;&nbsp;</td>
+                    <th class="subHeaderTh">Incoterms</th>
+                    <td class="subHeaderTd">&nbsp;&nbsp;&nbsp;{!quote.Incoterms}</td>
+                    <th class="subHeaderTh" style="text-align:Center;">Ship To</th>
+                    <td class="subHeaderTd" style="text-align:left; width: 32%;">{!quote.ShipToName}</td>
+                </tr>
+                <tr>
+                    <th>&nbsp;</th>
+                    <td class="subHeaderTd"></td>
+                    <th class="subHeaderTh"></th>
+                    <td class="subHeaderTd"></td>
+                    <th class="subHeaderTh"></th>
+                    <td class="subHeaderTd" style="text-align:left; width: 32%;">{!quote.ShippingStreet}</td>
+                </tr>
+                <tr>
+                    <th class="subHeaderTh"></th>
+                    <td class="subHeaderTd">&nbsp;&nbsp;&nbsp;</td>
+                    <th class="subHeaderTh">Attention</th>
+                    <td class="subHeaderTd">&nbsp;&nbsp;&nbsp;{!quote.ContactName}</td>
+                    <th class="subHeaderTh" style="text-align:Center"></th>
+                    <td class="subHeaderTd" style="text-align:left; width: 32%;">{!quote.ShippingCity}<apex:outputPanel rendered="{!showState}">, {!quote.ShippingState} </apex:outputPanel>, {!quote.ShippingPostalCode}</td>
+                </tr>
+                <tr>
+                    <th class="subHeaderTh"></th>
+                    <td class="subHeaderTd">&nbsp;&nbsp;&nbsp;</td>
+                    <th class="subHeaderTh"></th>
+                    <td class="subHeaderTd">&nbsp;&nbsp;&nbsp;{!quote.ContactEmail}</td>
+                    <th class="subHeaderTh"></th>
+                    <td class="subHeaderTd" style="text-align:left; width: 32%;">{!quote.ShippingCountry}</td>
+                </tr>
+                <tr>
+                    <th class="subHeaderTh"></th>
+                    <td class="subHeaderTd">&nbsp;&nbsp;&nbsp;</td>
+                    <th class="subHeaderTh"></th>
+                    <td class="subHeaderTd">&nbsp;&nbsp;&nbsp;{!quote.ContactPhone}</td>
+                    <th class="subHeaderTh"></th>
+                    <td class="subHeaderTd" style="text-align:left"></td>
+                </tr>
+                </table>
+            </div>
+            <br></br>
+            <br></br>
+            <div class="quoteLineItem" style="align: left;">
+                <apex:outputPanel rendered="{!showDiscountColumn}">
+                <table border="0" cellpadding="0" cellspacing="0" style="border-collapse:collapse;  -fs-table-paginate: paginate; ">
+                    <thead>
+                        <tr style="font-size:14px;">
+                            <th class="qtlHeader" style="width:30px; text-align:center;">
+                                <div style="margin: 0 10px 0 10px;">
+                                    <span style="border-bottom: 1px solid  #a09999;; display:block;">
+                                        #
+                                    </span>
+                                </div>
+                            </th>
+                            <th class="qtlHeader" style="width:130px; text-align:center;">
+                                <div style="margin: 0 10px 0 10px;">
+                                    <span style="border-bottom: 1px solid  #a09999;; display:block;">
+                                        Part
+                                    </span>
+                                </div>
+                            </th>
+                            <th class="qtlHeader" style="max-width:480px !important; min-width: 480px ; text-align:center;">
+                                <div style="margin: 0 10px 0 10px;">
+                                    <span style="border-bottom: 1px solid  #a09999;; display:block;">
+                                        Description
+                                    </span>
+                                </div>
+                            </th>
+                            <th class="qtlHeader" style="width:90px; text-align:center;">
+                                <div style="margin: 0 10px 0 10px;">
+                                    <span style="border-bottom: 1px solid  #a09999;; display:block;">
+                                        Quantity
+                                    </span>
+                                </div>    
+                            </th>
+                            <th class="qtlHeader" style="width:80px; text-align:center;">
+                                <div style="margin: 0 10px 0 10px;">
+                                    <span style="border-bottom: 1px solid  #a09999;; display:block;">
+                                        Price
+                                    </span>
+                                </div>
+                            </th>
+                            <th class="qtlHeader" style="width:95px; text-align:center;">
+                                <div style="margin: 0 10px 0 10px;">
+                                    <span style="border-bottom: 1px solid  #a09999;; display:block;">
+                                        Discount
+                                    </span>
+                                </div>
+                            </th>
+                            <th class="qtlHeader" style="width:100px; text-align:center;">
+                                <div style="margin: 0 10px 0 10px;">
+                                    <span style="border-bottom: 1px solid  #a09999;; display:block;">
+                                        Sale Price
+                                    </span>
+                                </div>
+                            </th>
+                            <th class="qtlHeader" style="width:100px; text-align:center;">
+                                <div style="margin: 0 10px 0 10px;">
+                                    <span style="border-bottom: 1px solid  #a09999;; display:block;">
+                                        Total Price
+                                    </span>
+                                </div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <apex:variable var="serialNumber" value="{!0}" />
+                        <apex:repeat value="{!quote.QuoteLineItems}" var="item">
+                            <apex:variable var="serialNumber" value="{!serialNumber + 1}" />
+                            <tr style="font-size:14px; color: #a09999;">
+                                <td class="containerTd" style="width:30px; text-align:center;">{!serialNumber}</td> <!-- Display quote line item Id -->
+                                <td class="containerTd" style="width:130px; text-align:left; padding-left:2px;">{!item.ProductName}</td> <!-- Display product name -->
+                                <td class="containerTd" style="max-width:480px !important; text-align:left; padding-left:4px; white-space: normal; visibility: visible; word-wrap:break-word; overflow-wrap: break-word; ">{!item.Description}</td>
+                                <td class="containerTd" style="width:90px; text-align:center;">&nbsp;&nbsp;{!item.Quantity}&nbsp;&nbsp;</td> <!-- Display quantity -->
+                                <td class="containerTd" style="width:80px; text-align:right;">&nbsp;&nbsp;{!item.UnitPrice}&nbsp;&nbsp;</td> <!-- Display unit price -->
+                                <td class="containerTd" style="width:95px; text-align:center;">&nbsp;&nbsp; {!item.Discount}&nbsp;&nbsp;</td>
+                                <td class="containerTd" style="width:100px; text-align:right;">&nbsp;&nbsp;{!item.ListPrice}&nbsp;&nbsp;</td> <!-- Display sale price -->
+                                <td class="containerTd" style="width:100px; text-align:right;">&nbsp;&nbsp;{!item.TotalPrice}&nbsp;&nbsp;</td> <!-- Display total price -->
+                            </tr>
+                        </apex:repeat>
+                    </tbody>
+                </table>
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!hideDiscountColumn}">
+                <table border="0" cellpadding="0" cellspacing="0" style="border-collapse:collapse;  -fs-table-paginate: paginate;">
+                    <thead>
+                        <tr style="font-size:14px;">
+                            
+                            <th class="qtlHeader" style="min-width:50px; text-align:center;">
+                                <div style="margin: 0 10px 0 10px;">
+                                    <span style="border-bottom: 1px solid  #a09999;; display:block;">
+                                        #
+                                    </span>
+                                </div>
+                            </th>
+                            <th class="qtlHeader" style="min-width:160px; text-align:center;">
+                                <div style="margin: 0 10px 0 10px;">
+                                    <span style="border-bottom: 1px solid  #a09999;; display:block;">
+                                        Item
+                                    </span>
+                                </div>    
+                            </th>
+                            <th class="qtlHeader" style="max-width:480px !important; min-width: 480px; text-align:center;">
+                                <div style="margin: 0 10px 0 10px;">
+                                    <span style="border-bottom: 1px solid  #a09999;; display:block;">
+                                        Description
+                                    </span>
+                                </div>
+                            </th>
+                            <th class="qtlHeader" style="min-width:100px; text-align:center;">
+                                <div style="margin: 0 10px 0 10px;">
+                                    <span style="border-bottom: 1px solid  #a09999;; display:block;">
+                                        Quantity
+                                    </span>
+                                </div>
+                            </th>
+                            <th class="qtlHeader" style="min-width:100px; text-align:center;">
+                                <div style="margin: 0 10px 0 10px;">
+                                    <span style="border-bottom: 1px solid  #a09999;; display:block;">
+                                        Unit Price
+                                    </span>
+                                </div>
+                            </th>
+                            <th class="qtlHeader" style="min-width:100px; text-align:center;">
+                                <div style="margin: 0 10px 0 10px;">
+                                    <span style="border-bottom: 1px solid  #a09999;; display:block;">
+                                        Amount
+                                    </span>
+                                </div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <apex:variable var="serialNumber" value="{!0}" />
+                        <apex:repeat value="{!quote.QuoteLineItems}" var="item">
+                            <apex:variable var="serialNumber" value="{!serialNumber + 1}" />
+                            <tr style="font-size:14px; color: #a09999;">
+                                <td class="containerTd" style="width:50px; text-align:center;">{!serialNumber}</td> <!-- Display quote line item Id -->
+                                <td class="containerTd" style="width:160px; text-align:left; padding:10px 7px 0 9px;">{!item.ProductName}</td> <!-- Display product name -->
+                                <td class="containerTd" style="max-width:480px !important; text-align:left; padding:10px 0 0 9px; word-break: break-word;">{!item.Description}</td>
+                                <td class="containerTd" style="width:100px; text-align:center;">&nbsp;&nbsp;{!item.Quantity}&nbsp;&nbsp;</td> <!-- Display quantity -->
+                                <td class="containerTd" style="width:100px; text-align:right;">&nbsp;&nbsp;{!item.UnitPrice}&nbsp;&nbsp;</td> <!-- Display unit price -->
+                                <td class="containerTd" style="width:100px; text-align:right;">&nbsp;&nbsp;{!item.TotalPrice}&nbsp;&nbsp;</td> <!-- Display total price -->
+                            </tr>
+                        </apex:repeat>
+                    </tbody>
+                </table>
+                </apex:outputPanel>
+            </div>
+            <div class="second-page">
+                
+                <div class="content" style="text-align:right; margin-top:40px; font-size:14px">
+                    <table style="width: auto; margin-left: auto; border-collapse: collapse; font-size:14px;">
+                        <tr>
+                            <td style="text-align: right; padding: 2px 10px;">Net Total Price</td>
+                            <td style="text-align: right; color: #a09999; padding: 2px 0;">{!quote.SubTotal}</td>
+                        </tr>
+                        <apex:outputPanel layout="none" rendered="{!hasLumpsumDiscount}">
+                            <tr>
+                                <td style="text-align: right; padding: 2px 10px;">Lumpsum Discount</td>
+                                <td style="text-align: right; color: #a09999; padding: 2px 0;">{!quote.LumpsumDiscount}</td>
+                            </tr>
+                        </apex:outputPanel>
+                        <tr>
+                            <td style="text-align: right; padding: 2px 10px;">Grand Total</td>
+                            <td style="text-align: right; color: #a09999; padding: 2px 0;">{!quote.FinalGrandTotal}</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: right; padding: 2px 10px;">Currency</td>
+                            <td style="text-align: right; color: #a09999; padding: 2px 0;">{!quote.CurrencyIsoCode}</td>
+                        </tr>
+                    </table>
+                    <br/>
+                    <div style="display:inline;">
+                        <p style="display: inline; font-style:italic; color: #a09999;">All applicable taxes will be charged at prevailing rates.</p>
+                    </div><br/>
+                    <apex:outputPanel rendered="{!showInidanAddress}">
+                        <div style="display:inline;">
+                            <p style="display: inline; font-style:italic; color: #a09999;">Tax ID: 24AACCI9593D1ZG </p>
+                        </div>
+                    </apex:outputPanel>
+                    <apex:outputPanel rendered="{! !showInidanAddress}">
+                        <div style="display:inline;">
+                            <p style="display: inline; font-style:italic; color: #a09999;">Tax ID: 81852 3284 RT0001</p>
+                        </div>
+                    </apex:outputPanel>
+                </div>
+                <div style="margin-top:10px;">
+                    <p style="font-weight:bold; font-size:12px; margin: -5px 0px -10px 0px;">Notes</p>
+                    <p style="color:#a09999; font-size:12px;">- Payment terms: 100% advance with PO or as agreed by our Commercial &amp; Finance Department.<br/>
+                        - Prices quoted are Incoterm: Ex-works Canada or selected port as determined by INVIXIUM, and are exclusive of all taxes, import/customs
+                        duty, brokerage fee and any other fees or charges. <br/>
+                        &nbsp;&nbsp;Where required by applicable law, these will be charged at prevailing rates at the time
+                        of invoicing and must also be paid.<br/>
+                        - This quotation is subject to the terms and conditions of sale available on request.<br/>
+                        - If tax exempt, please provide exemption number &amp; certificate of exemption.<br/>
+                        - If your organization does not issue Purchase Orders, please sign below as acceptance of this quotation, and return to confirm order.<br/>
+                        - Handling Fee: If there is a requirement for certification of documents, a US$500 charge will apply for each instance.<br/>
+                        - For support and updates on IXM WEB software from 2nd year ASC must be purchased; ASC is not hardware extended warranty it is the
+                        phone and online support for IXM WEB software.<br/>
+                        {!quote.AdditionalComments}
+                    </p>
+                        
+                </div>
+                <div style="margin-top:25px;">
+                    <p style="font-size:14px;">Per: _______________________________________<br/>
+                        (I have the authority to bind the company/corporation)
+                    </p>
+                </div>
+                <div>
+                    <p style="font-size:14px;">Name:<br/>
+                        Title:</p>
+                </div>
+                
+            </div>
+        </body>
+    </html>
+</apex:page>

@@ -1,0 +1,417 @@
+<!--
+  @description       : 
+  @author            : ChangeMeIn@UserSettingsUnder.SFDoc
+  @group             : 
+  @last modified on  : 09-19-2025
+  @last modified by  : ChangeMeIn@UserSettingsUnder.SFDoc
+-->
+<template>
+    <div class="outer-modal">
+    <lightning-quick-action-panel header={modalTitle}>
+        
+        <div class="sticky-container" >
+            <!-- Update the header component reference to pass totalPrice and showTotalPrice -->
+            <template if:false={isStep1}>
+                <c-quote-modal-header 
+                    quote-name={quoteData.Name} 
+                    account-name={quoteData.accountName}
+                    pricebook-name={pricebookName}
+                    total-price={totalPrice}
+                    show-total-price={isStep3}
+                    currency={quoteData.CurrencyIsoCode}
+                    class="sticky-header">
+                </c-quote-modal-header>
+            </template>
+            <div class="slds-p-horizontal_medium slds-p-vertical_x-small progress-container sticky-path no-click your-inner-container-class">
+                <lightning-progress-indicator current-step={currentStep} type="path" variant="base">
+                    <lightning-progress-step label="New Quote" value="1"></lightning-progress-step>
+                    <lightning-progress-step label="Selected Product" value="2"></lightning-progress-step>
+                    <lightning-progress-step label="Edit Quote Line Items" value="3"></lightning-progress-step>
+                </lightning-progress-indicator>
+            </div>
+        </div>
+
+        <!-- Step 1 -->
+        <template if:true={isStep1}>
+            <lightning-record-edit-form object-api-name="Quote" onsuccess={handleSuccess} style="overflow-y: auto;">
+                <lightning-spinner if:true={isLoading} alternative-text="Loading..."></lightning-spinner>
+                <h3 class="slds-section-title_divider">Quote Information</h3>
+                <div class="slds-grid slds-wrap form-row">
+                    <div class="slds-col slds-size_1-of-2 slds-p-around_x-small">
+                        <lightning-input-field field-name="Name" value={quoteData.Name}
+                            onchange={handleFieldChange} required></lightning-input-field>
+                    </div>
+                    <div class="slds-col slds-size_1-of-2 slds-p-around_x-small">
+                        <lightning-input-field field-name="ExpirationDate" value={quoteData.ExpirationDate}
+                            onchange={handleFieldChange}></lightning-input-field>
+                    </div>
+                </div>
+                <div class="slds-grid slds-wrap form-row">
+                    <div class="slds-col slds-size_1-of-2 slds-p-around_x-small">
+                        <label>Opportunity Name</label>
+                        <p>{quoteData.opportunityName}</p>
+                    </div>
+                    <div class="slds-col slds-size_1-of-2 slds-p-around_x-small">
+                        <lightning-input-field field-name="Status" value={quoteData.Status} 
+                            onchange={handleFieldChange} disabled></lightning-input-field>
+                    </div>
+                </div>
+                <div class="slds-grid slds-wrap form-row">
+                    <div class="slds-col slds-size_1-of-2 slds-p-around_x-small">
+                        <label>Billing Account</label>
+                        <p>{quoteData.accountName}</p>
+                        <label>End Customer</label>
+                        <p>{quoteData.endCustomer}</p>
+                        <lightning-input-field field-name="Additional__c" value={quoteData.Additional__c}
+                            onchange={handleFieldChange}></lightning-input-field>
+                    </div>
+                    <div class="slds-col slds-size_1-of-2 slds-p-around_x-small">
+                        <lightning-input-field field-name="Review_Requested_for__c"
+                            value={quoteData.Review_Requested_for__c}
+                            onchange={handleFieldChange}></lightning-input-field>
+                    </div>
+                </div>
+
+                <h3 class="slds-section-title_divider">Prepared For</h3>
+                <div class="slds-grid slds-wrap form-row">
+                    <div class="slds-col slds-size_1-of-1 slds-p-around_x-small">
+                        <lightning-input-field field-name="ContactId" value={quoteData.ContactId}
+                            onchange={handleFieldChange}></lightning-input-field>
+                    </div>
+                </div>
+
+                <h3 class="slds-section-title_divider">Address Information</h3>
+                <div class="slds-grid slds-wrap">
+                    <div class="slds-col slds-size_1-of-2 slds-p-around_x-small">
+                        <h4>Billing To</h4>
+                        <lightning-input-field field-name="BillingName" value={quoteData.BillingName}
+                            onchange={handleFieldChange}></lightning-input-field>
+                        <lightning-input-field field-name="BillingCountry" value={quoteData.BillingCountry}
+                            onchange={handleFieldChange}></lightning-input-field>
+                        <lightning-input-field field-name="BillingStreet" value={quoteData.BillingStreet}
+                            onchange={handleFieldChange}></lightning-input-field>
+                        <div class="slds-grid slds-gutters">
+                            <div class="slds-col">
+                                <lightning-input-field field-name="BillingCity"
+                                    value={quoteData.BillingCity}
+                                    onchange={handleFieldChange}></lightning-input-field>
+                            </div>
+                            <div class="slds-col">
+                                <lightning-combobox name="BillingState" label="Bill To State/Province"
+                                    value={quoteData.BillingState} options={stateOptions}
+                                    onchange={handleFieldChange}></lightning-combobox>
+                            </div>
+                        </div>
+                        <lightning-input-field field-name="BillingPostalCode"
+                            value={quoteData.BillingPostalCode}
+                            onchange={handleFieldChange}></lightning-input-field>
+                    </div>
+                    <div class="slds-col slds-size_1-of-2 slds-p-around_x-small">
+                        <h4>Ship To</h4>
+                        <lightning-input-field field-name="ShippingName" value={quoteData.ShippingName}
+                            onchange={handleFieldChange}></lightning-input-field>
+                        <lightning-input-field field-name="ShippingCountry"
+                            value={quoteData.ShippingCountry}
+                            onchange={handleFieldChange}></lightning-input-field>
+                        <lightning-input-field field-name="ShippingStreet" value={quoteData.ShippingStreet}
+                            onchange={handleFieldChange}></lightning-input-field>
+                        <div class="slds-grid slds-gutters">
+                            <div class="slds-col">
+                                <lightning-input-field field-name="ShippingCity"
+                                    value={quoteData.ShippingCity}
+                                    onchange={handleFieldChange}></lightning-input-field>
+                            </div>
+                            <div class="slds-col">
+                                <lightning-combobox name="ShippingState" label="Ship To State/Province"
+                                    value={quoteData.ShippingState} options={stateOptions}
+                                    onchange={handleFieldChange}></lightning-combobox>
+                            </div>
+                        </div>
+                        <lightning-input-field field-name="ShippingPostalCode"
+                            value={quoteData.ShippingPostalCode}
+                            onchange={handleFieldChange}></lightning-input-field>
+                    </div>
+                </div>
+
+                <h3 class="slds-section-title_divider">System Information</h3>
+                <div class="slds-grid slds-wrap form-row">
+                    <div class="slds-col slds-size_1-of-2 slds-p-around_x-small">
+                        Created By
+                    </div>
+                    <div class="slds-col slds-size_1-of-2 slds-p-around_x-small">
+                        Last Modified By
+                    </div>
+                </div>
+            </lightning-record-edit-form>
+        </template>
+
+        <!-- Step 2 -->
+        <template if:true={isStep2}>
+            <div class="step2-content">
+                <div class="slds-card">
+                    <!-- Search Bar -->
+                    <div class="slds-p-horizontal_medium">
+                        <lightning-input type="search" label="Search Products"
+                            placeholder="Search by Product Name or Code" value={searchKey}
+                            onchange={handleSearchChange}>
+                        </lightning-input>
+                    </div>
+    
+                    <!-- Accordion for Quote Line Items and New Products -->
+                    <lightning-accordion allow-multiple-sections-open active-section-name={activeSections}>
+                        <!-- Opportunity Products Section -->
+                        <lightning-accordion-section name="quoteLineItems" label="Opportunity Products">
+                            
+                            <div if:true={isLoading} class="slds-is-relative slds-p-around_large">
+                                <lightning-spinner alternative-text="Loading..." size="medium"></lightning-spinner>
+                            </div>
+                            <div if:false={isLoading}>
+                                <lightning-datatable key-field="Id" data={quoteLineItems}
+                                    columns={quoteLineItemColumns} selected-rows={selectedQuoteLineItems}
+                                    onrowselection={handleQuoteLineItemsSelection}
+                                    enable-infinite-loading={enableQuoteLineItemLoadMore}
+                                    show-row-number-column="true"
+                                    onloadmore={loadMoreQuoteLineItemData}
+                                    class="slds-table_bordered quote-line-item-table">
+                                </lightning-datatable>
+                            </div>
+                        </lightning-accordion-section>
+
+                        <!-- New Products Section -->
+                        <lightning-accordion-section name="newProducts" label="New Products">
+                            <div if:true={isLoading} class="slds-is-relative slds-p-around_large">
+                                <lightning-spinner alternative-text="Loading..." size="medium"></lightning-spinner>
+                            </div>
+                            <div if:false={isLoading}>
+                                <lightning-datatable key-field="Id" data={availableProducts}
+                                    columns={productColumns} selected-rows={selectedAvailableProducts}
+                                    onrowselection={handleAvailableProductsSelection}
+                                    enable-infinite-loading onloadmore={loadMoreNewProductData}
+                                    show-row-number-column="true"
+                                    class="slds-table_bordered available-products-table">
+                                </lightning-datatable>
+                            </div>
+                        </lightning-accordion-section>
+                    </lightning-accordion>
+                </div>
+            </div>
+        </template>
+
+        <!-- Step 3 -->
+        <template if:true={isStep3}>
+    <lightning-card style="margin: 0 !important; padding: 0 !important">
+        <div style="overflow-x: auto; max-width: 100%; margin-left: 3px;" class="table-container">
+            <!-- <div class="table-container"> -->
+            <table class="slds-table slds-table_bordered slds-table_cell-buffer">
+                <thead class="sticky-table-header" style="margin-left: 3px;">
+                    <tr>
+                        <th class="slds-text-title slds-truncate" style="white-space: normal; min-width: 47px;">Order</th>
+                        <th class="slds-text-title slds-truncate productname" style="white-space: normal;">Product Name</th>
+                        <th class="slds-text-title slds-truncate description-column" style="white-space: normal;">Product Description</th>
+                        <th class="slds-text-title slds-truncate" style="white-space: normal;">List Price</th>
+                        <th class="slds-text-title slds-truncate" style="white-space: normal;">Proposed Price</th>
+                        <th class="slds-text-title slds-truncate" style="white-space: normal; min-width: 64px;" >Quantity</th>
+                        <th class="slds-text-title slds-truncate" style="white-space: normal;">Discount (%)</th>
+                        <th class="slds-text-title slds-truncate" style="white-space: normal;">Sales Price</th>
+                        <th class="slds-text-title slds-truncate" style="white-space: normal;">Total Price</th>
+                        <th class="slds-text-title"></th>
+                        <template if:false={noData}>
+                            <th class="slds-text-title"></th>
+                        </template>
+                    </tr>
+                </thead>
+                    <tbody>
+                        <template lwc:if={noData}>
+                            <tr>
+                                <td colspan="11" style="border: none;">
+                                    <h3>No items to display.</h3>
+                                </td>
+                            </tr>
+                        </template>
+                        <template lwc:else>
+                            <template for:each={quoteItems} for:item="item" for:index="index">
+                                <tr key={item.id}>
+                                    <td style="text-align:center;">
+                                        <span>{item.order}</span>
+                                    </td>
+                                    <td class="description-cell">
+                                        <template if:true={item.isEditingProductName}>
+                                            <lightning-input type="text" value={item.productName} data-id={item.id} data-field="productName" onchange={handleInputChange} onblur={handleInputBlur} class="productname"></lightning-input>
+                                        </template>
+                                        <template if:false={item.isEditingProductName}>
+                                            <span class="productname" data-id={item.id} data-field="productName" onclick={toggleEditMode}>{item.productName}</span>
+                                        </template>
+                                    </td>
+                                    <td class="description-cell">
+                                        <template if:true={item.isEditingProductDescription}>
+                                            <lightning-textarea 
+                                                value={item.productDescription}
+                                                data-id={item.id}
+                                                data-field="productDescription"
+                                                onchange={handleInputChange}
+                                                onblur={handleInputBlur} 
+                                                class="description-column"
+                                                >
+                                            </lightning-textarea>
+                                        </template>
+                                        <template if:false={item.isEditingProductDescription}>
+                                            <span data-id={item.id} data-field="productDescription" onclick={toggleEditMode} class="description-column">{item.productDescription}</span>
+                                        </template>
+                                    </td>
+                                    <td class="non-editable-column" style="text-align:center !important;">
+                                       <span>{item.currency}  <lightning-formatted-number
+                                                            value={item.listPrice}
+                                                            maximum-fraction-digits="2"></lightning-formatted-number></span>
+                                    </td>
+                                    <td>
+                                        <template if:true={item.isEditingSalesPrice}>
+                                            <lightning-input type="number" value={item.salesPrice} data-id={item.id} data-field="salesPrice" onchange={handleInputChange} onblur={handleInputBlur} min="-9999999"></lightning-input>
+                                        </template>
+                                        <template if:false={item.isEditingSalesPrice}>
+                                            <div class="formatted" data-id={item.id} data-field="salesPrice" onclick={toggleEditMode}>
+                                                {item.currency}  <lightning-formatted-number value={item.salesPrice} data-id={item.id} data-field="salesPrice" maximum-fraction-digits="2"></lightning-formatted-number>
+                                            </div>
+                                        </template>
+                                    </td>
+                                    <td>
+                                        <template if:true={item.isEditingQuantity}>
+                                           <lightning-input
+    type="number"
+    data-id={item.id}
+    data-field="quantity"
+    value={item.quantity}
+    onchange={handleInputChange}
+    onblur={handleInputBlur}
+    min="1"
+    step="1"
+></lightning-input>
+                                        </template>
+                                        <template if:false={item.isEditingQuantity}>
+                                            <span data-id={item.id} data-field="quantity" class="focus" onclick={toggleEditMode}>{item.quantity}</span>
+                                        </template>
+                                    </td>
+                                    <td>
+                                        <template if:true={item.isEditingDiscount}>
+                                            <lightning-input type="number" value={item.discount} data-id={item.id} data-field="discount" onchange={handleInputChange} onblur={handleInputBlur} onfocusout={validation}></lightning-input>
+                                        </template>
+                                        <template if:false={item.isEditingDiscount}>
+                                            <span data-id={item.id} data-field="discount" onclick={toggleEditMode}>{item.discount}</span>
+                                        </template>
+                                    </td>
+                                    <td>
+                                        <span data-id={item.actualprice} data-field="actualprice">{item.currency}  <lightning-formatted-number value={item.actualprice} maximum-fraction-digits="2"></lightning-formatted-number></span>
+                                    </td>
+                                    <td>
+                                        <span data-id={item.totalPrice} data-field="totalPrice">{item.currency}  <lightning-formatted-number value={item.totalPrice} maximum-fraction-digits="2"></lightning-formatted-number></span>
+                                    </td>
+                                    <td>
+                                        <div class="arrow-buttons">
+                                            <lightning-button-icon
+                                                icon-name="utility:chevronup"
+                                                alternative-text="Move Up"
+                                                title="Move Up"
+                                                data-id={item.id}
+                                                onclick={moveUp}
+                                                variant="bare"
+                                                class="arrow-icon">
+                                            </lightning-button-icon>
+                                            <lightning-button-icon
+                                                icon-name="utility:chevrondown"
+                                                alternative-text="Move Down"
+                                                title="Move Down"
+                                                data-id={item.id}
+                                                onclick={moveDown}
+                                                variant="bare"
+                                                class="arrow-icon">
+                                            </lightning-button-icon>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="dropdown-container" onclick={toggleDropdown}>
+                                            <lightning-button-icon icon-name="utility:threedots_vertical" size="medium" alternative-text="More" title="More" data-id={item.id}></lightning-button-icon>
+                                            <template if:true={item.isDropdownOpen}>
+                                                <div class="slds-dropdown slds-dropdown_right slds-dropdown_actions">
+                                                    <ul class="slds-dropdown__list" role="menu">
+                                                        <li class="slds-dropdown__item" role="presentation">
+                                                            <a role="menuitem" tabindex="0" data-id={item.id} onclick={handleDelete}>
+                                                                <lightning-icon icon-name="utility:delete" size="x-small" class="slds-m-right_x-small"></lightning-icon>
+                                                                Delete
+                                                            </a>
+                                                        </li>
+                                                        <li class="slds-dropdown__item" role="presentation">
+                                                            <a role="menuitem" tabindex="0" data-id={item.id} onclick={handleClone}>
+                                                                <lightning-icon icon-name="utility:copy" size="x-small" class="slds-m-right_x-small"></lightning-icon>
+                                                                Clone
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </template>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </template>
+                        </template>
+                    </tbody>
+                </table>
+                 </div>
+            </lightning-card>
+        </template>
+
+        <!-- Footer Buttons -->
+        <div slot="footer">
+            <template if:true={isStep1}>
+                <lightning-button variant="neutral" style="margin-right: 10px;" label="Cancel" onclick={closeModal} disabled={isLoading}></lightning-button>
+                <lightning-button variant="neutral" style="margin-right: 10px;" label="Save & Continue" onclick={goToStep2} disabled={isLoading}></lightning-button>
+                <lightning-button variant="brand" style="margin-right: 10px;" label="Save" onclick={updateQuote} disabled={isLoading}></lightning-button>
+            </template>
+            <template if:true={isStep2}>
+                <lightning-button variant="neutral" style="margin-right: 10px;" label="Back" onclick={goToStep1} disabled={isLoading}></lightning-button>
+                <lightning-button variant="brand" style="margin-right: 10px;" label="Next" onclick={goToStep3} disabled={isLoading}></lightning-button>
+            </template>
+            <template if:true={isStep3}>
+                <lightning-button variant="neutral" style="margin-right: 10px;" label="Back" onclick={goToStep2} disabled={isLoading}></lightning-button>
+                <lightning-button variant="brand" style="margin-right: 10px;" label="Submit" onclick={submitQuote} disabled={isLoading}></lightning-button>
+            </template>
+        </div>
+
+        <template if:true={isReviewModalOpen}>
+ <div class="custom-nested-backdrop"></div>
+    <section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="modal-heading-01"
+             class="slds-modal slds-fade-in-open">
+        <div class="slds-modal__container" style="width: 40rem; max-width: 90%;">
+            <div class="slds-modal__content slds-p-around_medium"
+                 style="background: white; border-radius: 4px;">
+                <h2 id="modal-heading-01"
+                    class="slds-text-heading_medium slds-align_absolute-center slds-m-bottom_medium"
+                    style="padding-top: 16px;">
+                    Review Request Comment
+                </h2>
+
+                <div class="slds-form-element" style="padding: 0 16px;">
+                    <p>Please provide a comment for the review request due to discounted line items.</p>
+                    <div class="slds-form-element slds-m-top_small">
+                        <label class="slds-form-element__label slds-text-color_weak"
+                               for="comment-textarea">Additional Comments</label>
+                        <div class="slds-form-element__control">
+                            <textarea id="comment-textarea"
+                                      class="slds-textarea"
+                                      style="width: 100%; min-height: 6rem; border: 1px solid #d8dde6;"
+                                maxlength="255"
+                                onchange={handleReviewCommentChange}>{reviewComment}</textarea>
+                        </div>
+                    </div>
+
+                    <div class="slds-grid slds-grid_align-end slds-m-top_medium" style="padding-bottom: 12px;">
+                        <button class="slds-button slds-button_neutral" onclick={handleReviewModalCancel}>Cancel</button>
+                        <button class="slds-button slds-button_brand slds-m-left_x-small"
+                                onclick={handleReviewCommentSubmit}>Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</template>
+    </lightning-quick-action-panel>
+    </div>
+</template>

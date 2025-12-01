@@ -1,0 +1,8 @@
+<apex:page > 
+ <apex:panelGrid columns="4" >
+   <analytics:reportChart reportId="00O15000007nfps" showRefreshButton="True" size="small" />
+   <analytics:reportChart reportId="00O15000007nfpx" showRefreshButton="True" size="small"/>
+   <analytics:reportChart reportId="00O15000007nfq2" showRefreshButton="True" size="small"/>
+   <analytics:reportChart reportId="00O15000007noGh" showRefreshButton="True" size="small"/>
+</apex:panelGrid>
+</apex:page>

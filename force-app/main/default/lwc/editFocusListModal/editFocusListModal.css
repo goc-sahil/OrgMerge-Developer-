@@ -1,0 +1,229 @@
+/* Host element should take full available width */
+:host {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+
+/* -------------------------------------------------
+   OUTER MODAL CONTAINER - PREVENT DOUBLE SCROLL
+   ------------------------------------------------- */
+.outer-modal {
+    height: 100%;
+    overflow: hidden; /* Prevent scroll on outer container */
+}
+
+/* -------------------------------------------------
+   TWO-ROW SCORE SUMMARY
+   ------------------------------------------------- */
+.score-summary-wrapper {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #d8dde6;
+    border-radius: 0.5rem;
+    background: #f9f9f9;
+    overflow: hidden;
+    min-width: 450px;
+    max-width: 600px;
+}
+
+.summary-headers,
+.summary-values {
+    display: flex;
+    flex: 1;
+}
+
+.summary-box {
+    flex: 1;
+    text-align: center;
+    padding: 0.5rem;
+    min-width: 90px;
+    border-right: 1px solid #d8dde6;
+}
+.summary-box:last-child { border-right: none; }
+
+/* Header row */
+.summary-headers .summary-box {
+    background: #f9f9f9;
+}
+
+/* Value row */
+.summary-values {
+    background: #f9f9f9;
+}
+
+/* Probability styling */
+.summary-headers .probability-header {
+    background: #f9f9f9;
+}
+.probability-value { 
+    background-color: #f44336;
+    color: #fff;
+    font-weight: bold; 
+    text-align: center; 
+}
+.probability-green  { background-color: #4caf50; }
+.probability-orange { background-color: #ff9800; }
+.probability-red    { background-color: #d32f2f; }
+
+/* -------------------------------------------------
+   STICKY HEADER CONTAINER - FIXED AT TOP
+   ------------------------------------------------- */
+.sticky-container {
+    width: 100%;
+    position: sticky;
+    top: 0;
+    z-index: 100; /* High z-index to stay above content */
+    background: #fff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Add shadow for depth */
+}
+
+/* -------------------------------------------------
+   MAIN LAYOUT
+   ------------------------------------------------- */
+.slds-text-heading_small {
+    background-color: oklch(.97 .014 254.604);
+    border: 1px solid oklch(.882 .059 254.128);
+    padding: 9px;
+    margin: 0; /* Remove margin to prevent gaps */
+}
+
+.header-row { 
+    flex-wrap: nowrap !important; 
+    gap: 0.5rem; 
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid #d8dde6;
+}
+.title { 
+    margin: 0; 
+    font-size: 1.4rem; 
+    white-space: nowrap; 
+}
+
+.button-spacing { margin-right: 8px; }
+
+/* -------------------------------------------------
+   MAIN CONTAINER - SCROLLABLE AREA
+   ------------------------------------------------- */
+.main-container { 
+    padding: 0; /* Remove padding to let slds-modal__content handle it */
+    background-color: #ffffff; 
+    width: 100%;
+    overflow-y: auto; /* Enable vertical scrolling only here */
+    max-height: calc(94vh - 320px); /* Changed to 94vh */
+}
+
+/* Modal content area */
+.slds-modal__content {
+    padding: 1.5rem !important;
+    overflow: visible !important; /* Let parent handle scroll */
+}
+
+/* Modal header */
+.slds-modal__header {
+    padding: 0 !important;
+    margin: 0 !important;
+    /* border-bottom: none !important; */
+    position: relative;
+    z-index: 10; /* Lower than sticky-container */
+}
+
+/* -------------------------------------------------
+   PATH/TABS CONTAINER
+   ------------------------------------------------- */
+.path-container { 
+    background-color: #ffffff;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid #d8dde6;
+}
+
+.path-container lightning-progress-indicator {
+    display: block;
+}
+
+/* -------------------------------------------------
+   TABLE STYLES
+   ------------------------------------------------- */
+.table-container { 
+    overflow-x: auto;
+    width: 100%;
+    margin-top: 0; /* Ensure no gap between header and table */
+}
+
+.custom-table { 
+    width: 100%;
+    table-layout: auto;
+    margin-bottom: 0;
+}
+
+.custom-table th { 
+    background-color: #032d60; 
+    color: white; 
+    text-align: left; 
+    font-weight: 600; 
+    padding: 0.5rem; 
+    position: sticky;
+    top: 0; /* Stick table headers too */
+    z-index: 50;
+}
+
+.custom-table td { 
+    background-color: white; 
+    padding: 0.5rem; 
+    vertical-align: middle; 
+}
+
+/* Column widths */
+.col-number   { 
+    width: 50px; 
+    text-align: center; 
+}
+.col-question { 
+    width: 200px; 
+    word-wrap: break-word; 
+    word-break: break-word; /* Changed from break-all to break-word */
+    white-space: normal; 
+}
+.col-answer   { 
+    width: 100px; 
+    text-align: center; 
+}
+.col-comment  { 
+    width: 300px; 
+}
+.col-score    { 
+    width: 40px; 
+    text-align: center; 
+}
+
+lightning-textarea, 
+lightning-combobox { 
+    width: 100%; 
+}
+
+/* -------------------------------------------------
+   FOOTER STYLES
+   ------------------------------------------------- */
+.slds-modal__footer {
+    position: sticky;
+    bottom: 0;
+    background: #fff;
+    border-top: 1px solid #d8dde6;
+    padding: 1rem 1.5rem;
+    z-index: 90;
+}
+/* Red border for invalid required fields */
+.invalid-field {
+    --sds-c-textarea-color-border: #c23934;
+    --sds-c-textarea-color-border-focus: #c23934;
+    --sds-c-combobox-color-border: #c23934;
+    --sds-c-combobox-color-border-focus: #c23934;
+    border-color: #c23934 !important;
+    box-shadow: 0 0 0 1px #c23934 inset;
+}
+
+.invalid-field lightning-textarea,
+.invalid-field lightning-combobox {
+    border-color: #c23934;
+}

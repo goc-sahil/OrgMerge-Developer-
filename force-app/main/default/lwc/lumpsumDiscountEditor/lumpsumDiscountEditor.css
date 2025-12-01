@@ -1,0 +1,26 @@
+.discount-input-inline {
+    width: 150px;
+    display: inline-block;
+}
+
+.discount-input-inline input {
+    text-align: right;
+}
+
+.discount-section {
+    display: flex;
+    align-items: center;
+}
+
+.vertical-divider {
+    width: 1px;
+    height: 30px;
+    background-color: #dddbda;
+    margin: 0 1rem;
+}
+
+.title {
+    font-size: 1rem;
+    font-weight: bold;
+    margin: 0.6rem 0 0 0.6rem;
+}

@@ -1,0 +1,198 @@
+<apex:page showHeader="false" sidebar="false">
+    
+
+    <head>
+        
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta name="viewport" content="width=device-width"/>
+        
+        <!-- TITLE -->
+        <title>Thank You For Your Feedback</title>
+      
+        <!-- RATING FAVICON -->
+        <link rel="shortcut icon" type="image/x-icon" href="{! $Resource.CSAT}/4.png"/>
+        
+        <style>
+            html {
+                box-sizing: border-box;
+                text-rendering: optimizeLegibility !important;
+                -webkit-font-smoothing: antialiased !important;
+            }
+            
+            *, *:before, *:after {
+                box-sizing: inherit;
+            }
+            
+            body {
+                margin: 0;
+                padding: 0;
+                font-family: Avenir, Myriad Pro, sans-serif !important;
+                color: #383838;
+            }
+            
+            header {
+                min-width: 400px;
+                width: 500px;
+                height: auto;
+                margin: auto;
+                margin-top: 50px;
+                text-align: center;
+            }
+            
+            .logo {
+                margin: auto;
+                width: 150px;
+                height: 65px;
+                margin-bottom: 50px;
+            }
+            
+            h1 {
+                font-size: 18px;
+                font-weight: bold;
+                margin-bottom: 10px;
+                padding-left: 10px;
+                padding-right: 10px;
+            }
+            
+            h2 {
+                font-size: 14px;
+                font-weight: 300;
+                padding-left: 5px;
+                padding-right: 5px;
+            }
+            
+            #panel {
+                min-width: 400px;
+                margin: auto;
+                background: #f2f2f2;
+                border: 1px solid #e1e1e1;
+                border-radius: 3px;
+                width: 500px;
+                height: auto;
+                overflow: hidden;
+                margin-top: 20px;
+                margin-bottom: 50px;
+            }
+            
+            #panel h3 {
+                margin: 0;
+                padding: 0;
+                font-size: 14px;
+                font-weight: bold;
+            }
+            
+            .section {
+                min-width: 400px;
+                width: 500px;
+                border-bottom: 1px solid #e1e1e1;
+                padding: 20px;
+                text-align: center;
+                float: left;
+            }
+            
+            form {
+                height: auto;
+                overflow: hidden;
+                margin: 0;
+                padding: 0;
+            }
+            
+            textarea {
+                width: 100%;
+                height: 100px;
+                float: left;
+                border: 1px solid #dbdbdb;
+                border-radius: 3px;
+                margin-top: 20px;
+                font-size: 13px;
+                padding: 5px;
+                color: #042c39;
+            }
+            
+            input {
+                
+                
+            }
+            
+            input[type=textarea], textarea {
+                outline: none;
+                box-shadow: 0 1px 3px rgba(161, 179, 183, 0.4);
+                border-bottom: 1px solid #DDDDDD;
+            }
+            
+            .submit {
+                border: none;
+                margin: 0;
+                padding: 0;
+                margin-bottom: 20px;
+            }
+            
+            .submit:hover {
+                
+            }
+            
+            .section input {
+                margin: auto;
+                margin-left: 0px;
+                margin-top: 5px;
+                
+            }
+            
+            table {
+                margin-top: 20px;
+            }
+            
+            p {
+                margin: 0;
+                padding: 0;
+                font-size: 14px;
+                font-weight: 300;
+            }
+            
+            .pleft {
+                text-align: left;
+            }
+            
+            .last {
+                border-bottom: none;
+            }
+            
+            .btn {
+                margin: 0; 
+                padding: 0;
+                background-color:#00C782;
+                border: none;
+                border-radius:18px;
+                color:#ffffff;
+                display:inline-block;
+                font-family:Avenir,sans-serif !important;
+                font-size:13px;font-weight:bold;
+                line-height:36px;
+                text-align:center;
+                text-decoration:none;
+                width:160px;
+                -webkit-text-size-adjust:none;
+                mso-hide:all; 
+                cursor: hand;
+                -webkit-transition:background .3s ease;
+                -webkit-appearance: none;
+            }
+            
+            .btn:hover {
+                background-color: #5cb85c;
+                border: none;
+            }
+            
+            
+        </style>
+    </head>
+    <body>
+        <header>
+            <div class="logo">
+                <img src="{! $Resource.CSAT}/SalesforceServiceCloudLogo.png"  height="65" alt="Salesforce Service Cloud Support Rating"/>
+            </div>
+            <h1>Thank you. Your feedback has been submitted.</h1>
+        </header>
+        
+    </body>
+</apex:page>

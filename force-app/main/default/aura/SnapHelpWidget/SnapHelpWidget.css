@@ -1,0 +1,14 @@
+.THIS.widgetIcon {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    z-index: 10000;
+}
+
+.THIS.widgetIframe {
+    position: fixed;
+    right: 60px;
+    bottom: 55px;
+    z-index: 10000;
+    box-shadow: 0px 0px 5px grey;
+}

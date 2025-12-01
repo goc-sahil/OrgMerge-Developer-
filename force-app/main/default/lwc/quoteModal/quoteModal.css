@@ -1,0 +1,652 @@
+.custom-modal {
+    border: 0;
+    box-shadow: none;
+}
+
+.custom-modal-container {
+    width: 100%;
+    height: auto; /* Remove fixed height */
+    max-height: 90vh; /* Ensure it fits within viewport */
+    border-radius: 0.25rem;
+    overflow: hidden; /* Prevent overflow issues */
+}
+
+.custom-modal-header {
+    background-color: #4a4a4a;
+    color: #ffffff;
+    padding: 0.5rem 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.no-click lightning-progress-step {
+    pointer-events: none !important;
+}
+
+.no-click lightning-progress-step:hover {
+    cursor: default !important;
+    background: none !important;
+}
+.custom-modal-header,
+.custom-modal-footer {
+    margin: 0;
+    padding: 0.75rem 1rem;
+}
+.custom-close-btn {
+    color: #ffffff;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.25rem;
+    line-height: 1;
+}
+
+.custom-modal-title {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: bold;
+}
+
+.custom-header-text {
+    font-size: 0.75rem;
+    color: #ffffff;
+}
+
+/* .custom-header-text a {
+    color: #0070d2;
+    text-decoration: none;
+} */
+/* Ensure modal content is scrollable if needed */
+.custom-modal-content {
+    max-height: 70vh; /* Reduce height to leave space for header/footer */
+    overflow-y: auto;
+    padding: 1rem;
+}
+.custom-section-box {
+    border: 1px solid #d8dde6;
+    border-radius: 0.25rem;
+    background-color: #ffffff;
+    margin-bottom: 1rem;
+}
+
+.custom-section-title {
+    background-color: #e0e5ee;
+    padding: 0.5rem;
+    font-weight: bold;
+    margin: -0.5rem -0.5rem 0.5rem -0.5rem;
+    font-size: 1rem;
+}
+
+.custom-required {
+    color: #c23934;
+    font-size: 0.75rem;
+    margin-left: 0.5rem;
+}
+
+.custom-subheader {
+    font-size: 0.875rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.custom-note {
+    color: #706e6b;
+    font-size: 0.75rem;
+    margin-top: 0.25rem;
+}
+
+.custom-modal-footer {
+    background-color: #ffffff;
+    padding: 0.75rem 1rem;
+    text-align: right;
+    border-top: 1px solid #d8dde6;
+}
+
+.slds-input {
+    border-radius: 0;
+    border-color: #d8dde6;
+}
+
+.slds-button_neutral {
+    background-color: #e0e0e0;
+    color: #000000;
+}
+
+/* .slds-button_brand {
+    background-color: #0070d2;
+    color: #ffffff;
+} */
+
+/* Standardize vertical spacing between form rows */
+.form-row {
+    margin-bottom: 0;
+}
+
+/* Lightning-input-field padding adjustment */
+.form-row .slds-p-around_x-small {
+    padding-top: 0.125rem;
+    padding-bottom: 0.125rem;
+}
+
+/* Address fields city and state in one row */
+.slds-gutters {
+    margin-left: -8px;
+    margin-right: -8px;
+}
+
+.slds-gutters .slds-col {
+    padding-left: 8px;
+    padding-right: 8px;
+}
+
+/* Label and static text styling */
+.slds-col label {
+    display: block;
+    font-size: 0.75rem;
+    color: #706e6b;
+    margin-bottom: 0.25rem;
+}
+
+.slds-col p {
+    min-height: 32px;
+    padding-top: 0.25rem;
+}
+
+.available-products-table {
+    height: 300px;
+    display: block;
+}
+
+.opportunity-product-table {
+    height: 170px;
+    display: block;
+}
+
+.non-editable-column {
+    background-color: #f5f5f5;
+    text-align: center !important;
+}
+
+/* Integrated editableQuoteTable Styles */
+.container {
+    display: flex;
+    flex-direction: column;
+    margin: -0.75rem 0 -0.75rem 0;
+    overflow: hidden;
+}
+
+span, .formatted {
+    display: flex;
+    min-height: 50px;
+    justify-content: center;
+    align-items: center;
+}
+
+td,
+th {
+    border-right: 0.5px solid #c9c9c9;
+    border-bottom: 0;
+    border-top: 0;
+}
+
+th {
+    font-size: small;
+}
+
+td:first-child,
+th:first-child {
+    border-left: 0.5px solid #c9c9c9;
+}
+
+thead {
+    position: sticky !important;
+    top: 0 !important;
+    width: 100% !important;
+    z-index: 9999 !important;
+}
+
+.header {
+    padding: 10px;
+    border-bottom: 1px solid #dcdcdc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 450;
+    font-size: 21px;
+}
+
+.content {
+    flex: 1 1 auto;
+    max-height: 340px;
+    min-height: 340px;
+    overflow-y: auto;
+    background-color: #ffffff;
+}
+
+.footer {
+    font-size: small;
+    width: 100%;
+    background-color: #f3f3f3;
+    padding: 10px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    border-top: 1px solid #dcdcdc;
+    margin: 0;
+}
+
+td,
+th {
+    text-align: center;
+}
+
+/* Order column */
+.slds-table th:nth-child(1),
+.slds-table td:nth-child(1) {
+    width: 40px;
+    min-width: 40px;
+    max-width: 40px;
+    padding: 0 4px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+/* Product Name column - Increased width */
+.slds-table th:nth-child(2),
+.slds-table td:nth-child(2) {
+    width: 180px;
+    min-width: 180px;
+    max-width: 180px;
+    padding: 0 6px;
+    text-align: left;
+    vertical-align: middle;
+}
+
+/* Product Description column - Increased width */
+.slds-table th:nth-child(3),
+.slds-table td:nth-child(3) {
+    width: 450px;
+    min-width: 450px;
+    max-width: 450px;
+    padding: 0 6px;
+    text-align: left;
+    vertical-align: middle;
+    word-wrap: break-word;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-wrap: wrap;
+}
+
+/* List Price column - Reduced width */
+.slds-table th:nth-child(4),
+.slds-table td:nth-child(4) {
+    width: 80px;
+    min-width: 80px;
+    /* max-width: 80px; */
+    padding: 0 4px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+/* Proposed Price column - Reduced width */
+.slds-table th:nth-child(5),
+.slds-table td:nth-child(5) {
+    width: 80px;
+    min-width: 80px;
+    /* max-width: 80px; */
+    padding: 0 4px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+/* Quantity column - Reduced width */
+.slds-table th:nth-child(6),
+.slds-table td:nth-child(6) {
+   width: 50px;
+    min-width: 50px;
+    max-width: 50px;
+    padding: 0 4px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+/* Discount column - Reduced width */
+.slds-table th:nth-child(7),
+.slds-table td:nth-child(7) {
+    width: 70px;
+    min-width: 70px;
+    max-width: 70px;
+    padding: 0 4px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+/* Sales Price column - Reduced width */
+.slds-table th:nth-child(8),
+.slds-table td:nth-child(8) {
+    width: 80px;
+    min-width: 80px;
+    /* max-width: 80px; */
+    padding: 0 4px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+/* Total Price column - Maintain current width */
+.slds-table th:nth-child(9),
+.slds-table td:nth-child(9) {
+    width: 100px;
+    min-width: 100px;
+    /* max-width: 100px; */
+    padding: 0 4px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+/* Move Up/Down Buttons column */
+.slds-table th:nth-child(10),
+.slds-table td:nth-child(10) {
+    width: 40px;
+    min-width: 40px;
+    max-width: 40px;
+    padding: 0 4px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+/* Actions (Delete/Clone) column */
+.slds-table th:nth-child(11),
+.slds-table td:nth-child(11) {
+    width: 60px;
+    min-width: 60px;
+    max-width: 60px;
+    padding: 0 4px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+/* Ensure table is responsive */
+.slds-table {
+    width: 100%;
+    table-layout: auto;
+}
+
+/* Maintain existing styles for description cells */
+.description-column,
+.description-cell {
+    word-wrap: break-word;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-wrap: wrap;
+}
+
+td {
+    cursor: pointer;
+}
+
+tbody > tr:nth-child(3) {
+    cursor: auto;
+}
+
+.input {
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 5px;
+}
+
+.lightning-button {
+    margin: 10px 0;
+}
+
+.slds-button-group lightning-button-icon {
+    width: 24px;
+    height: 24px;
+    /* --slds-c-button-icon-color-foreground: #0070d2; */
+    --slds-c-button-icon-color-background: transparent;
+    transition: transform 0.2s, background-color 0.2s;
+    margin: 2px;
+    box-sizing: border-box;
+}
+
+.slds-button-group lightning-button-icon:hover,
+.slds-button-group lightning-button-icon:focus {
+    --slds-c-button-icon-color-background: #f3f3f3;
+    transform: scale(1.1);
+}
+
+.slds-button-group {
+    display: flex;
+    flex-direction: row;
+    gap: 6px;
+    justify-content: center;
+    align-items: center;
+    padding: 2px;
+}
+
+/* Adjust accordion styling */
+lightning-accordion {
+    margin-top: 1rem;
+}
+
+lightning-accordion-section {
+    margin-bottom: 0.5rem;
+}
+
+lightning-accordion-section .slds-accordion__summary {
+    background-color: #e0e5ee;
+    padding: 0.5rem;
+    font-weight: bold;
+}
+
+lightning-accordion-section .slds-accordion__content {
+    padding: 0.5rem;
+}
+
+/* Ensure datatables maintain their height */
+.opportunity-product-table {
+    height: 170px;
+    display: block;
+}
+
+.available-products-table {
+    height: 300px;
+    display: block;
+}
+.review-comment-modal {
+    animation: fadeIn 0.3s ease-out;
+}
+
+.review-comment-modal {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.16);
+    border-radius: 0.25rem;
+}
+.slds-modal__container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    max-width: 97%; /* Prevent it from being too wide */
+    height: auto; /* Let the height adjust to content */
+    max-height: 90vh; /* Ensure it doesn't exceed viewport height */
+    margin: 0; /* Remove any default margins */
+    padding: 0; /* Remove any default padding */
+    background-color: #ffffff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.16);
+    border-radius: 0.25rem;
+}
+.review-comment-modal .slds-modal__header {
+    border-bottom: 1px solid #ececec;
+    padding: 1rem 1.5rem;
+}
+
+.review-comment-modal .slds-modal__content {
+    background: #ffffff;
+    border-radius: 0.25rem;
+    margin: 0.5rem;
+}
+
+.review-comment-modal .slds-modal__footer {
+    border-top: 1px solid #ececec;
+    padding: 0.75rem 1rem;
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+}
+
+.review-comment-modal .slds-button {
+    transition: all 0.2s ease;
+}
+
+.review-comment-modal .slds-button:hover {
+    transform: translateY(-1px);
+}
+
+.review-comment-modal .slds-textarea {
+    border: 1px solid #d8dde6;
+    border-radius: 0.25rem;
+    transition: border-color 0.2s ease;
+}
+/* 
+.review-comment-modal .slds-textarea:focus {
+    border-color: #1589ee;
+    box-shadow: 0 0 3px #0070d2;
+} */
+.custom-nested-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 9001; /* above main backdrop (usually 1040) but below modal content (1060) */
+}
+
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+:host {
+    --sticky-z-index: 100;
+}
+
+.slds-modal__content {
+    padding: 0;
+    margin: 0;
+    max-height: 70vh; /* Adjust based on header/footer height */
+    overflow-y: auto;
+}
+/* Sticky container for header and progress indicator in Step 2 */
+/* :host([data-step2]) .sticky-container {
+    position: sticky;
+    top: 0;
+    z-index: var(--sticky-z-index);
+    background: #fff; /* Ensure background is not transparent */
+/* }  */
+.sticky-container {
+    position: sticky;
+    top: 0;
+    z-index: var(--sticky-z-index);
+    background: #fff; /* Ensure background is not transparent */
+}
+
+/* Ensure header and progress indicator stack correctly */
+.sticky-header,
+.sticky-path {
+    width: 100%;
+}
+
+/* Ensure Step 2 content has padding to avoid overlap */
+/* .step2-content {
+    padding-top: 1rem;
+} */
+.arrow-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.arrow-icon {
+    margin: 2px 0;
+    --slds-c-icon-color-foreground-default: #5c5c5c; /* Customize icon color if needed */
+    --slds-c-button-icon-color-background: transparent;
+}
+.slds-modal__close {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    z-index: 1001; /* Ensure it's above other elements */
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+.slds-modal__close .slds-button__icon {
+    fill: #ffffff; /* Match the header's color scheme */
+}
+.table-container {
+    max-height: 400px; /* Adjust height as needed */
+    overflow-y: auto; /* Enable vertical scrolling */
+    overflow-x: auto; /* Enable horizontal scrolling if needed */
+    position: relative; /* Ensure sticky positioning works relative to this container */
+    width: 100%;
+}
+
+/* Sticky table header */
+.sticky-table-header {
+    position: sticky;
+    top: 0;
+    background: #f3f2f2; /* Match SLDS table header background */
+    z-index: 10; /* Ensure header stays above table body */
+}
+
+/* Ensure table header cells align with body cells */
+.slds-table th,
+.slds-table td {
+    padding: 0.5rem;
+    vertical-align: middle;
+    text-align: center;
+}
+
+/* Optional: Improve header appearance */
+.slds-table th {
+    font-weight: bold;
+    font-size: small;
+    border-bottom: 1px solid #c9c9c9;
+}
+
+/* Ensure table is responsive */
+.slds-table {
+    width: 100%;
+    table-layout: auto;
+    border-collapse: collapse;
+}
+
+/* Maintain existing column widths */
+.slds-table th:nth-child(1),
+.slds-table td:nth-child(1) {
+    width: 40px;
+    min-width: 40px;
+    max-width: 40px;
+}
+
+.slds-table th:nth-child(2),
+.slds-table td:nth-child(2) {
+    width: 180px;
+    min-width: 180px;
+    max-width: 180px;
+}
+
+.slds-table th:nth-child(3),
+.slds-table td:nth-child(3) {
+    width: 450px;
+    min-width: 450px;
+    max-width: 450px;
+}

@@ -1,0 +1,144 @@
+<template>
+    <lightning-card style="margin: 0 !important; padding:0 !important">
+    <div class="main-wrapper">
+        <!-- Loading Overlay - Only covers the modal -->
+        <template if:true={loading}>
+            <div class="custom-loading-overlay">
+                <div class="spinner-container">
+                    <lightning-spinner alternative-text="Processing" size="large"></lightning-spinner>
+                    <div class="loading-message">Saving changes...</div>
+                </div>
+            </div>
+        </template>
+
+        <div class="custom-header">
+            <h2>Reorder Quote Line Items</h2>
+        </div>
+        
+        <div class="modal-container">
+        <div class="fixed-header">
+            <div class="list-header slds-grid slds-grid_align-spread">
+                <div class="slds-col slds-size_1-of-12"></div>
+                <div class="slds-col slds-size_5-of-12 slds-text-title_caps">Product</div>
+                <div class="slds-col slds-size_3-of-12 slds-text-title_caps slds-text-align_right">Sales Price</div>
+                <div class="slds-col slds-size_3-of-12 slds-text-title_caps slds-text-align_right">Actions</div>
+            </div>
+        </div>
+
+        <!-- Scrollable Content -->
+        <div class="scrollable-content">
+            <template if:true={hierarchy}>
+                <div class="items-container">
+                    <template for:each={hierarchy} for:item="parent">
+                        <div key={parent.Id} 
+                             class={parent.cssClass}
+                             data-id={parent.Id}
+                             draggable="true"
+                             ondragstart={handleDragStart}
+                             ondragover={handleDragOver}
+                             ondrop={handleDrop}
+                             ondragenter={handleDragEnter}
+                             ondragleave={handleDragLeave}>
+                            
+                            <!-- Expand/Collapse Icon -->
+                            <div class="slds-col slds-size_1-of-12 expand-col">
+                                <template if:true={parent.hasChildren}>
+                                    <lightning-button-icon 
+                                        icon-name={parent.expandIcon}
+                                        alternative-text="Toggle children" 
+                                        title={parent.expandTitle}
+                                        onclick={handleToggleChildren}
+                                        data-id={parent.Id}
+                                        variant="bare"
+                                        class="expand-btn">
+                                    </lightning-button-icon>
+                                </template>
+                            </div>
+                            
+                            <div class="slds-col slds-size_5-of-12">
+                                <lightning-icon icon-name="utility:drag_and_drop" size="x-small" class="drag-handle"></lightning-icon>
+                                <span class="parent-name">{parent.Name}</span>
+                                <template if:true={parent.hasChildren}>
+                                    <span class="child-count">({parent.childCount})</span>
+                                </template>
+                            </div>
+                            
+                            <div class="slds-col slds-size_3-of-12 price-col">
+                                <span class="currency-code">{parent.CurrencyCode}</span>
+                                <span class="price-value">{parent.SalesPrice}</span>
+                            </div>
+                            
+                            <div class="slds-col slds-size_3-of-12 actions-col">
+                                <lightning-button-icon 
+                                    icon-name="utility:chevronup" 
+                                    alternative-text="Move up" 
+                                    title="Move Up"
+                                    onclick={handleMoveUpParent} 
+                                    data-id={parent.Id} 
+                                    class="action-btn"
+                                    disabled={parent.isFirst}>
+                                </lightning-button-icon>
+                                <lightning-button-icon 
+                                    icon-name="utility:chevrondown" 
+                                    alternative-text="Move down" 
+                                    title="Move Down"
+                                    onclick={handleMoveDownParent} 
+                                    data-id={parent.Id} 
+                                    class="action-btn"
+                                    disabled={parent.isLast}>
+                                </lightning-button-icon>
+                            </div>
+                        </div>
+
+                        <!-- Children Container (Collapsible) -->
+                        <template if:true={parent.showChildren}>
+                            <div class="children-container" key={parent.Id}>
+                                <template for:each={parent.children} for:item="child">
+                                    <div key={child.Id} 
+                                         class={child.cssClass}
+                                         data-id={child.Id}>
+                                        <div class="slds-col slds-size_1-of-12"></div>
+                                        <div class="slds-col slds-size_5-of-12">
+                                            <span class="child-icon">└─</span>
+                                            <span class="child-name">{child.Name}</span>
+                                        </div>
+                                        <div class="slds-col slds-size_3-of-12 price-col">
+                                            <span class="currency-code">{child.CurrencyCode}</span>
+                                            <span class="price-value">{child.SalesPrice}</span>
+                                        </div>
+                                        <div class="slds-col slds-size_3-of-12 actions-col">
+                                            <span class="child-info">Moves with parent</span>
+                                        </div>
+                                    </div>
+                                </template>
+                            </div>
+                        </template>
+                    </template>
+                </div>
+            </template>
+
+            <template if:true={error}>
+                <div class="slds-text-color_error slds-m-top_small slds-p-around_small">{error}</div>
+            </template>
+        </div>
+
+        <!-- Fixed Footer -->
+        <div class="fixed-footer">
+            <div class="actions">
+                <lightning-button 
+                    variant="neutral" 
+                    label="Cancel" 
+                    onclick={handleCancel}>
+                </lightning-button>
+                <lightning-button 
+                    variant="brand" 
+                    label="Save Order" 
+                    onclick={handleSave} 
+                    disabled={saveDisabled}>
+                </lightning-button>
+            </div>
+        </div>
+    </div>
+    </div>
+    </lightning-card>
+</template>

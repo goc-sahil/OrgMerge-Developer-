@@ -1,0 +1,151 @@
+<template>
+    <template if:true={isOpen}>
+        <div class="slds-modal slds-fade-in-open custom-modal" role="dialog" aria-modal="true">
+            <div class="slds-modal__container custom-modal-container">
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-modal__close" title="Close" onclick={closeModal}>
+                        <lightning-icon icon-name="utility:close" alternative-text="close" size="small"
+                            variant="bare"></lightning-icon>
+                    </button>
+                    <h2 class="slds-text-heading_medium">{modalTitle}</h2>
+                </header>
+
+                <div class="slds-modal__content" style="max-height: 80vh; overflow-y: auto;">
+                    
+                   
+    <lightning-record-edit-form object-api-name="Quote" onsuccess={handleSuccess}>
+        <div class="slds-form slds-form_stacked">
+            <lightning-spinner if:true={isLoading} alternative-text="Loading..."></lightning-spinner>
+            <h3 class="slds-section-title_divider">Quote Information</h3>
+            <div class="slds-grid slds-wrap form-row">
+                <div class="slds-col slds-size_1-of-2 slds-p-around_x-small">
+                    <lightning-input-field field-name="Name" value={quoteData.Name}
+                        onchange={handleFieldChange} required></lightning-input-field>
+                </div>
+                <div class="slds-col slds-size_1-of-2 slds-p-around_x-small">
+                    <lightning-input-field field-name="ExpirationDate" value={quoteData.ExpirationDate}
+                        onchange={handleFieldChange}></lightning-input-field>
+                </div>
+            </div>
+            <div class="slds-grid slds-wrap form-row">
+                <div class="slds-col slds-size_1-of-2 slds-p-around_x-small">
+                    <div class="slds-form-element">
+                        <div class="slds-form-element__control">
+                            <lightning-input-field field-name="OpportunityId" value={quoteData.OpportunityId}
+                        onchange={handleFieldChange}></lightning-input-field>
+                        </div>
+                    </div>
+                </div>
+                <div class="slds-col slds-size_1-of-2 slds-p-around_x-small">
+                    <lightning-input-field field-name="Status" value={quoteData.Status}
+                        onchange={handleFieldChange} disabled></lightning-input-field>
+                </div>
+            </div>
+            <div class="slds-grid slds-wrap form-row">
+                <div class="slds-col slds-size_1-of-2 slds-p-around_x-small">
+                    <div class="slds-form-element">
+                        <div class="slds-form-element__control">
+                            <lightning-input-field field-name="AccountId" value={quoteData.AccountId}
+                        onchange={handleFieldChange}></lightning-input-field>
+                        </div>
+                    </div>
+                    <lightning-input-field field-name="Additional__c" value={quoteData.Additional__c}
+                        onchange={handleFieldChange}></lightning-input-field>
+                </div>
+                <div class="slds-col slds-size_1-of-2 slds-p-around_x-small">
+                    <lightning-input-field field-name="Review_Requested_for__c"
+                        value={quoteData.Review_Requested_for__c}
+                        onchange={handleFieldChange}></lightning-input-field>
+                </div>
+            </div>
+
+            <h3 class="slds-section-title_divider">Prepared For</h3>
+            <div class="slds-grid slds-wrap form-row">
+                <div class="slds-col slds-size_1-of-1 slds-p-around_x-small">
+                    <lightning-input-field field-name="ContactId" value={quoteData.ContactId}
+                        onchange={handleFieldChange}></lightning-input-field>
+                </div>
+            </div>
+
+                <h3 class="slds-section-title_divider">Address Information</h3>
+                <div class="slds-grid slds-wrap">
+                    <div class="slds-col slds-size_1-of-2 slds-p-around_x-small">
+                        <h4>Billing To</h4>
+                        <lightning-input-field field-name="BillingName" value={quoteData.BillingName}
+                            onchange={handleFieldChange}></lightning-input-field>
+                        <lightning-input-field field-name="BillingCountry" value={quoteData.BillingCountry}
+                            onchange={handleFieldChange}></lightning-input-field>
+                        <lightning-input-field field-name="BillingStreet" value={quoteData.BillingStreet}
+                            onchange={handleFieldChange}></lightning-input-field>
+                        <div class="slds-grid slds-gutters">
+                            <div class="slds-col">
+                                <lightning-input-field field-name="BillingCity"
+                                    value={quoteData.BillingCity}
+                                    onchange={handleFieldChange}></lightning-input-field>
+                            </div>
+                            <div class="slds-col">
+                                <lightning-combobox name="BillingState" label="Bill To State/Province"
+                                    value={quoteData.BillingState} options={stateOptions}
+                                    onchange={handleFieldChange}></lightning-combobox>
+                            </div>
+                        </div>
+                        <lightning-input-field field-name="BillingPostalCode"
+                            value={quoteData.BillingPostalCode}
+                            onchange={handleFieldChange}></lightning-input-field>
+                    </div>
+                    <div class="slds-col slds-size_1-of-2 slds-p-around_x-small">
+                        <h4>Ship To</h4>
+                        <lightning-input-field field-name="ShippingName" value={quoteData.ShippingName}
+                            onchange={handleFieldChange}></lightning-input-field>
+                        <lightning-input-field field-name="ShippingCountry"
+                            value={quoteData.ShippingCountry}
+                            onchange={handleFieldChange}></lightning-input-field>
+                        <lightning-input-field field-name="ShippingStreet" value={quoteData.ShippingStreet}
+                            onchange={handleFieldChange}></lightning-input-field>
+                        <div class="slds-grid slds-gutters">
+                            <div class="slds-col">
+                                <lightning-input-field field-name="ShippingCity"
+                                    value={quoteData.ShippingCity}
+                                    onchange={handleFieldChange}></lightning-input-field>
+                            </div>
+                            <div class="slds-col">
+                                <lightning-combobox name="ShippingState" label="Ship To State/Province"
+                                    value={quoteData.ShippingState} options={stateOptions}
+                                    onchange={handleFieldChange}></lightning-combobox>
+                            </div>
+                        </div>
+                        <lightning-input-field field-name="ShippingPostalCode"
+                            value={quoteData.ShippingPostalCode}
+                            onchange={handleFieldChange}></lightning-input-field>
+                    </div>
+                </div>
+            </div>
+        </lightning-record-edit-form>
+    
+
+                    <!-- Step 2 -->
+                   
+
+                    
+                </div>
+
+                <!-- Footer Buttons -->
+                <footer class="slds-modal__footer">
+                  
+                        <button class="slds-button slds-button_neutral" onclick={closeModal}
+                            disabled={isLoading}>Cancel</button>
+                        
+                        <button class="slds-button slds-button_brand" onclick={createNewQuote}
+                            disabled={isLoading}>Save</button>
+                   
+                  
+                </footer>
+            </div>
+        </div>
+
+       
+
+
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+</template>

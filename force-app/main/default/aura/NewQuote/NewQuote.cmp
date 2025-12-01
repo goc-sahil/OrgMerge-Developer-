@@ -1,0 +1,9 @@
+<aura:component implements="lightning:actionOverride,flexipage:availableForAllPageTypes">
+    <aura:attribute name="recordId" type="String" /> 
+    <aura:attribute name="onquotecreated" type="Aura.Action" />
+    
+    <c:quoteNewHandler 
+        recordId="{!v.recordId}"
+        onquotecreated="{!v.onquotecreated}"
+    />
+</aura:component>

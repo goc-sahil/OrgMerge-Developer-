@@ -1,0 +1,71 @@
+<aura:component implements="lightning:actionOverride" >
+    <lightning:workspaceAPI aura:id="workspace"/>
+    <aura:attribute name="Isconsole" type="Boolean" default="0" />
+    <aura:attribute name="disabled" type="Boolean" default="false" />
+    <aura:attribute name="saved" type="Boolean" default="false" />
+    <aura:attribute name="recordId" type="String" />
+    <aura:attribute name="isOpen" type="String" default="false" />
+	<aura:attribute name="subject" type="String" />
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    
+    <aura:if isTrue="{!v.isOpen}">
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open ">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <lightning:buttonIcon iconName="utility:close"
+                                              onclick="{! c.cancelDialog }"
+                                              alternativeText="close"
+                                              variant="bare-inverse"
+                                              class="slds-modal__close"/>
+                    <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">New Case</h2>
+                </header>
+                <lightning:recordEditForm aura:id="newCaseForm" onload="{!c.handleLoad}"
+                                          onsuccess="{!c.handleSuccess}"
+                                          onerror="{!c.handleError}"
+                                          objectApiName="Case">
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                        
+                        <lightning:messages />
+                        <br/>
+                        <lightning:layout multipleRows="true">
+                            <lightning:layoutItem size="6">
+                                <lightning:inputField aura:id="SubjectField" fieldName="Subject"/>
+                            </lightning:layoutItem>
+                            <lightning:layoutItem size="6">
+                                <lightning:inputField fieldName="Description" />
+                            </lightning:layoutItem>
+                            <lightning:layoutItem size="6">
+                                <lightning:inputField fieldName="Labels_Pickval__c" />
+                            </lightning:layoutItem>
+                            <lightning:layoutItem size="6">
+                                <lightning:inputField fieldName="OwnerId" />
+                            </lightning:layoutItem>
+                            <lightning:layoutItem size="6">
+                                <lightning:inputField fieldName="Status" />
+                            </lightning:layoutItem>
+                            <lightning:layoutItem size="6">
+                                <lightning:inputField fieldName="custom_category__c" />
+                            </lightning:layoutItem>
+                            <lightning:layoutItem size="6">
+                                <lightning:inputField fieldName="Origin" />
+                            </lightning:layoutItem>
+                            <lightning:layoutItem size="6">
+                                <lightning:inputField fieldName="ContactId" />
+                            </lightning:layoutItem>
+                            <lightning:layoutItem size="6">
+                                <lightning:inputField fieldName="Priority" />
+                            </lightning:layoutItem>
+                        </lightning:layout>
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <lightning:button variant="neutral" label="Cancel" onclick="{!c.cancelDialog}"/>
+                        <lightning:button  variant="brand" type="button" name="save" label="Save" onclick="{!c.handleSubmit}"/>
+                    </footer>
+                </lightning:recordEditForm>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </aura:if>
+    
+</aura:component>

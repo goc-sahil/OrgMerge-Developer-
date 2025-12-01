@@ -1,0 +1,195 @@
+<aura:component controller="GenerateQuoteProformaCmpCtrl"
+    implements="force:lightningQuickActionWithoutHeader,flexipage:availableForRecordHome,force:hasRecordId"
+     access="global">
+
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+
+    <aura:attribute name="recordId" type="Id" />
+    <aura:attribute name="showButton" type="Boolean" />
+    <aura:attribute name="showIframe" type="Boolean" default="false"/>
+    <aura:attribute name="installments" type="Object[]" default="[{'amount':,'paid':false}]" />
+    <aura:attribute name="totalAmount" type="Decimal" default="0"/>
+    <aura:attribute name="paidAmount" type="Decimal"/>
+    <aura:attribute name="remainingAmount" type="Decimal"/>
+    <aura:attribute name="taxAmount" type="Decimal"/>
+    <aura:attribute name="totalGrandAmount" type="Decimal"/>
+    
+    <aura:attribute name="nowPaying" type="Decimal"/>
+    <aura:attribute name="selectedTaxType" type="String" default=""/>
+    
+    <aura:attribute name="shipVia" type="String" default=""/>
+    <aura:attribute name="dueDate" type="Date"/>
+    <aura:attribute name="tDate" type="Date"/>
+    <aura:attribute name="index" type="String"/>
+    <aura:attribute name="taxRate" type="Decimal" default="0"/>
+    <aura:attribute name="totalPaidAmount" type="String"/>
+    <aura:attribute name="totalUnpaidAmount" type="String"/>
+    <aura:attribute name="paymentTerm" type="String"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    
+    <aura:attribute name="options" type="List" default="[
+        {'label': 'IGST (18%)', 'value': 'IGST'},
+        {'label': 'SGST/CGST (18%)', 'value': 'SGST/CGST'},
+        {'label': 'ON HST (13%)', 'value': 'ONHST'}
+        ]"/>
+
+    <ltng:require styles="{!$Resource.ModalWidthCSS}" />
+
+    <aura:html tag="style">
+        /* (CSS styles remain unchanged) */
+        .slds-modal__content{
+            height: auto !important;
+            max-height: fit-content !important;
+        }
+        .slds-p-around--medium{
+            height: auto !important;
+            max-height: fit-content !important;
+        }
+        .add-button{
+            cursor:pointer;
+            font-size:20px;
+            margin-left:10px;
+            color:#0070d2;
+        }
+    </aura:html>
+
+    <div class="slds-modal__content slds-p-around--medium slds-size_1-of-1 slds-is-relative">
+	
+        <aura:if isTrue="{!not(v.showIframe)}">
+            <header class="slds-modal__header">
+            	<h2 class="slds-text-heading_medium slds-hyphenate">Proforma Invoice</h2>
+        	</header>
+            <div class="slds-p-around_medium slds-card slds-box slds-theme_default slds-grid slds-wrap">
+                 
+                <div class="slds-col slds-size_1-of-2 slds-p-horizontal_small slds-m-bottom_medium">
+                    <lightning:input type="date"
+                                     label="Date"
+                                     value="{!v.tDate}"
+                                     placeholder="Select Date"
+                                    aura:id="dateInput"
+                 messageWhenValueMissing="Please select a date."/>
+                </div>
+                
+                <div class="slds-col slds-size_1-of-2 slds-p-horizontal_small slds-m-bottom_medium">
+                    <lightning:input type="date"
+                                     label="Due Date"
+                                     value="{!v.dueDate}"
+                                     placeholder="Select Due Date"
+                                     aura:id="dueDateInput"
+                 messageWhenValueMissing="Please select a date."/>
+                </div>
+
+                <div class="slds-col slds-size_1-of-2 slds-p-horizontal_small slds-m-bottom_medium">
+                    <lightning:combobox 
+                        name="taxType" 
+                        label="Tax Type" 
+                        value="{!v.selectedTaxType}" 
+                        placeholder="Select Tax Type" 
+                        options="{!v.options }" 
+                        onchange="{!c.handleTaxTypeChange }"
+                    />
+                </div>
+                
+                <div class="slds-col slds-size_1-of-2 slds-p-horizontal_small slds-m-bottom_medium">
+                    <lightning:input
+                        type="text"
+                        label="Ship Via"
+                        value="{!v.shipVia}"
+                        placeholder="Enter shipping method or details"
+                    />
+                </div>
+                
+                 <div class="slds-col slds-size_1-of-2 slds-p-horizontal_small slds-m-bottom_medium">
+                    <lightning:input
+                        type="text"
+                        label="Payment Term"
+                        value="{!v.paymentTerm}"
+                        placeholder="Payment Term"
+                    />
+                </div>
+                
+                
+                <h3  class="label slds-section__title slds-truncate slds-p-around_x-small slds-theme_shade slds-m-vertical_medium slds-col slds-size_1-of-1" >
+                    <span title="Payment Installments">Payment Installments (%)</span></h3>
+                <aura:iteration items="{!v.installments}" var="inst" indexVar="index">
+                    <div class="slds-grid slds-wrap slds-col slds-size_1-of-1 slds-p-horizontal_small slds-m-bottom_x-small slds-grid_vertical-align-center">
+
+                        <div class="slds-col slds-size_1-of-4 slds-text-align_right slds-p-right_medium">
+                            <span class="slds-form-element__label">{!'Installment ' + (index+1)}</span>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-4">
+                            <lightning:input type="number"
+                                             value="{!inst.amount}" 
+                                             aura:id="amountInput"
+                                             onchange="{!c.updateInstallmentAmountWrapper}" 
+                                             data-index="{!index}" 
+                                             label="Amount (%)" 
+                                             variant="label-hidden"
+                                             name="{!index}"/>
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-4 slds-p-left_medium"> 
+                            <lightning:input type="checkbox"
+                                             label="Paid"
+                                             checked="{#inst.paid}"
+                                             onchange="{!c.updateInstallmentPaidWrapper}" 
+                                             data-index="{!index}" 
+                                             name="{!index}"
+                            />
+                        </div>
+
+                        <div class="slds-col slds-size_1-of-4 slds-p-left_x-small">
+                            <aura:if isTrue="{!index == (v.installments.length - 1)}">
+                                <lightning:buttonIcon iconName="utility:add" 
+                                                      variant="border-filled" 
+                                                      alternativeText="Add Installment" 
+                                                      onclick="{!c.addInstallment}" 
+                                />
+                            </aura:if>
+                        </div>
+
+                    </div>
+                </aura:iteration>
+
+              <div class="slds-m-top_large slds-col slds-size_1-of-1 slds-p-horizontal_small slds-grid slds-grid_align-center">
+                        <lightning:button label="Cancel" variant="neutral" onclick="{!c.handleClose}" class="slds-m-right_small"/>
+                        <lightning:button label="Next" variant="brand" onclick="{!c.handleNext}" />
+                    </div>
+            </div>
+        </aura:if>
+
+        <aura:if isTrue="{!v.showIframe}">
+           <div class="modaal-header slds-modal__header"
+                style="position: fixed;left: 0;width:100%;right: 0;top: 0;z-index: 999999;">
+                <h4 class="title slds-text-heading--medium">Proforma Invoice</h4>
+            </div>
+            <iframe src="{!
+                '/apex/GenerateProformaInvoicePDF?Id=' + v.recordId + 
+                '&amp;ObjectName=isQuote' + 
+                '&amp;paid=' + v.paidAmount + 
+                '&amp;paying=' + v.nowPaying + 
+                '&amp;remaining=' + v.remainingAmount + 
+                '&amp;taxAmount=' + v.taxAmount + 
+                '&amp;selectedTaxType=' + v.selectedTaxType + 
+                '&amp;dueDate=' + v.dueDate +
+                '&amp;shipVia=' + v.shipVia +
+                '&amp;totalGrandAmount=' + v.totalGrandAmount +
+                '&amp;tDate=' + v.tDate +
+                '&amp;index=' + v.index +
+                '&amp;totalPaidPercentage=' + v.totalPaidAmount +
+                '&amp;totalUnpaidPercentage=' + v.totalUnpaidAmount +
+                '&amp;paymentTerm=' + v.paymentTerm +
+                '#toolbar=0'}"
+                    width="100%" height="800px" frameBorder="0"/>
+             <div class="modal-footer slds-modal__footer slds-size_1-of-1"
+                style="position: fixed;left: 0;width: 100%;height: 80px;right: 0;bottom: 0;z-index: 999999;">
+                <lightning:button variant="brand" label="Save PDF" onclick="{!c.saveInvoice}" />
+                <lightning:button variant="neutral" label="Cancel" onclick="{!c.handleClose}" />
+            </div>
+        </aura:if>
+
+    </div>
+</aura:component>

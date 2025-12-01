@@ -1,0 +1,16 @@
+<template>
+    <lightning-card title="Opportunity Stage Update" icon-name="standard:opportunity">
+
+        <template if:true={oppData}>
+            <p class="slds-p-around_small">
+                <b>Name:</b> {oppData.Name} <br>
+                <b>Stage:</b> {oppData.StageName}
+            </p>
+        </template>
+
+        <div class="slds-p-around_small">
+            <lightning-button label="Update Stage to Closed Won" onclick={handleUpdate}></lightning-button>
+        </div>
+
+    </lightning-card>
+</template>

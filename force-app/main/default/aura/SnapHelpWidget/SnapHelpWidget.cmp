@@ -1,0 +1,17 @@
+<aura:component implements="flexipage:availableForAllPageTypes" access="global" controller="SnapHelpWidgetController">
+    <aura:attribute name="displayWidget" type="Boolean" access="public" description="Displays the widget. Set to false if trial is expired." default="true" /> 
+    <aura:attribute name="isOpen" type="Boolean" access="public" description="Toggles the widget to be open or closed." default="false" /> 
+    <aura:attribute name="communityUrl" type="String" access="public" description="Url of the community to be iframed." default="https://desk.force.com/helpwidget" />
+    
+    <aura:handler name="init" action="{!c.init}" value="{!this}" />
+
+    <aura:if isTrue="{!v.displayWidget}">
+    <div class="widgetIcon">
+         <img src="{!$Resource.widgetHelpIcon}" onclick="{!c.onClick}" width="60"/>
+    </div>
+    <div class="{!v.isOpen ? 'slds-show widgetIframe' : 'slds-hide widgetIframe'}">
+        <iframe src="{!v.communityUrl}" height="600" width="400" frameborder="0"/>
+    </div>
+        </aura:if>
+    
+</aura:component>

@@ -1,0 +1,67 @@
+<apex:component controller="CaseRMAApprovalTemplt" access="global">
+   <apex:attribute name="csId" type="Id" description="Id of the case" assignTo="{!caseId}"/>
+   <apex:attribute name="CaseNumber" type="Decimal" description="Number of the case" />
+   <apex:attribute name="CreatedDate" type="DateTime" description="Date of the case created" />
+   <apex:attribute name="ContactName" type="String" description="Contact Person name" />
+   <apex:attribute name="AccountName" type="String" description="Account name of the case" />
+   <apex:attribute name="TroubleShootingSteps" type="String" description="Troubleshootinig steps of the case" />
+   <apex:attribute name="ThreadId" type="String" description="Case thread id" />
+   <br/>
+   Case # {!Text(CaseNumber)} generated on &nbsp;
+    <apex:outputText value="{0,date,MM'/'dd'/'yyyy}">
+        <apex:param value="{!CreatedDate}" /> 
+    </apex:outputText>
+   needs to be processed for RMA.<br/>
+   <div style="display: none;"><input type="hidden">{!rma}</input></div>
+   <ul>
+      <li>
+         <b>Contact Name:</b>{!ContactName}
+      </li>
+      <li>
+         <b>Company Name:</b> {!AccountName}
+      </li>
+      <li>
+         <b>Device Serial Number:</b> {!deviceNumbers}
+      </li>
+      <li>
+         <b>Device Family</b> {!deviceFamily }
+      </li>
+      <li>
+         <b>Device Type:</b> {!deviceType}
+      </li>
+      <li>
+         <b>Warranty Status:</b> {!warrentyStatus}
+      </li>
+      <li>
+         <b>Problem Statement:</b> {!hardwareIssue}
+      </li>
+      <li>
+         <b>Troubleshooting Steps:</b> {!TroubleShootingSteps}
+      </li>
+   </ul>
+   <p>
+      Please refer to the email chain below for more details and provide your approval at the earliest.
+   </p>
+   <p>Best Regards,</p>
+   <div style="color:rgb(0,0,0); font-family:arial; font-size:12pt">
+      <span lang="EN-CA" style="">
+         <span lang="EN-CA" style="">
+            <p class="x_MsoNormal" style="font-size:12pt; background-color:rgb(255,255,255)">
+               <span lang="EN-US" style="font-family:Arial,sans-serif; color:rgb(255,102,0)">Invixium Technical Services Team</span>
+            </p>
+            <p class="x_MsoNormal" style="background-color:rgb(255,255,255)"><font size="1"><span lang="EN-US" style="font-family:Verdana,sans-serif; color:rgb(31,73,125)">Contact US&nbsp; :&nbsp;</span><span lang="EN-CA" style="font-family:Arial,sans-serif">+1 844 INVIXIUM (468
+               4948)&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;</span><span lang="EN-CA" style="font-family:Verdana,sans-serif; color:rgb(31,73,125)">Email :&nbsp;</span><span lang="EN-CA" style="font-family:Verdana,sans-serif"><a href="mailto:support@invixium.com" target="_blank" rel="noopener noreferrer" data-auth="NotApplicable" id="LPlnk777769"><span style="font-family:Calibri,sans-serif">support@invixium.com</span></a></span></font>
+            </p>
+            <p class="x_MsoNormal" style="background-color:rgb(255,255,255)"><font size="1"><span lang="EN-CA" style="font-family:Verdana,sans-serif; color:rgb(31,73,125)">Work Hours :&nbsp;</span><span lang="EN-CA" style="font-family:Arial,sans-serif">12:00AM to 5:00PM (Eastern
+               Time)&nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span lang="EN-CA" style="font-family:Verdana,sans-serif; color:rgb(31,73,125)">Skype :&nbsp;</span><span lang="EN-CA" style="font-family:Arial,sans-serif"><span style="font-family:Calibri,sans-serif">invixium_support</span></span><span lang="EN-CA" style="font-family:Verdana,sans-serif; color:rgb(31,73,125)">&nbsp;</span><span lang="EN-CA" style="font-family:Arial,sans-serif"></span></font>
+            </p>
+            <p class="x_MsoNormal" style="font-size:12pt; background-color:rgb(255,255,255)">
+               <span style="font-size:8pt; font-family:Arial,sans-serif; color:rgb(127,127,127)">This email and any attachments may contain confidential and privileged information. If you have received this message in error, please notify us immediately and destroy the material
+               in its entirety, whether electronic or hard copy. Also, please consider the environment before printing this email.</span>
+            </p>
+            
+         </span>
+      </span>
+   </div>
+   {!ThreadId}
+</apex:component>

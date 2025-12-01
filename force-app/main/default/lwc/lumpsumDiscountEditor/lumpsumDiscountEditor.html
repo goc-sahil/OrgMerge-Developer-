@@ -1,0 +1,59 @@
+<template>
+    <div class="slds-size_full slds-is-fixed summary-container slds-card slds-card_boundary" tabindex="0" aria-label="Quote Summary" style="left: 12px; width: 98.6%; bottom: 40px; z-index: 1000; background-color: #F3F3F3;">
+    
+        <h2 class="title">Quote Summary</h2>
+            <!-- All in one line: Subtotal | Lumpsum Discount | Grand Total -->
+            <!-- <div class="slds-grid slds-gutters_small slds-p-around_small slds-grid_vertical-align-center slds-grid_align-spread" style="background-color: #FFFFFF;"> -->
+            <div class="slds-grid slds-p-around_small slds-grid_vertical-align-center slds-grid_align-spread" style="background-color: #FFFFFF;">
+                <!-- Subtotal -->
+                <div class="slds-col">
+                    <span class="slds-text-body_regular">Subtotal</span>
+                    <span class="slds-text-body_regular slds-m-left_small">{currencyIsoCode} {formattedSubtotal}</span>
+                </div>
+
+                <div class="vertical-divider"></div>
+
+                <!-- Lumpsum Discount -->
+                <div class="slds-col discount-section">
+                    <span class="slds-text-body_regular slds-m-right_small">Lumpsum Discount</span>
+                    <lightning-input 
+                        type="number" 
+                        variant="label-hidden"
+                        value={lumpsumDiscount}
+                        onchange={handleDiscountChange}
+                        step="0.01"
+                        min="0"
+                        class="discount-input-inline"
+                        disabled={isLoading}>
+                    </lightning-input>
+                </div>
+
+                <div class="vertical-divider"></div>
+
+                <!-- Grand Total -->
+                <div class="slds-col">
+                    <span class="slds-text-body_regular">Grand Total</span>
+                    <span class="slds-text-body_regular slds-m-left_small">{currencyIsoCode} {formattedFinalGrandTotal}</span>
+                </div>
+
+            </div>
+
+            <!-- Save Button (only shows when discount changes) -->
+            <template if:true={showSaveButton}>
+                <div class="slds-p-around_small slds-text-align_center slds-border_top">
+                    <lightning-button 
+                        variant="brand" 
+                        label="Save" 
+                        onclick={handleSave}
+                        disabled={isLoading}
+                        size="small">
+                    </lightning-button>
+                </div>
+            </template>
+        
+
+        <template if:true={isLoading}>
+            <lightning-spinner alternative-text="Loading" size="small"></lightning-spinner>
+        </template>
+    </div>
+</template>

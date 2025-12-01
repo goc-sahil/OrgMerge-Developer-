@@ -1,0 +1,9 @@
+<apex:page showheader="false" sidebar="false">
+<apex:outputPanel id="SalesfunnelDashboard" >
+     <script>
+     window.location.href="https://invixium.my.salesforce.com/01Z15000001A1G1?isdtp=vw";
+   
+       
+     </script>
+     </apex:outputPanel>
+</apex:page>

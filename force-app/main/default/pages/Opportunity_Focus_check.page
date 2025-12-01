@@ -1,0 +1,6 @@
+<apex:page standardController="Opportunity" rendered="{!Opportunity.Focus_List__c = "Yes"}">
+<script type="text/javascript">
+window.alert("After manufacturing date you must enterd descriptin");
+</script>
+  
+</apex:page>

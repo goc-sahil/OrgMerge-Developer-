@@ -1,0 +1,63 @@
+<aura:component controller="CasePresenceController" implements="flexipage:availableForAllPageTypes,force:hasRecordId" access="global" >
+ 
+    <ltng:require scripts="{!$Resource.cometd}" afterScriptsLoaded="{!c.onCometdLoaded}"/>
+
+    <aura:attribute name="sessionId" type="String"/>
+    <aura:attribute name="userId" type="String"/>
+    <aura:attribute name="username" type="String"/>
+    <aura:attribute name="smallPhotoURL" type="String"/>
+    <aura:attribute name="cometd" type="Object"/>
+    <aura:attribute name="cometdSubscriptions" type="Object[]"/>
+    
+    <aura:attribute name="usersAccessing" type="Object[]"/>
+	<aura:handler event="lightning:tabClosed" action="{! c.onTabClosed }"/>
+    <aura:attribute name="isInitialised" type="Boolean" default="false"/> 
+    <aura:handler name="init" value="{!this}" action="{!c.onInit}"/> 
+   
+    
+    <aura:registerEvent name="cometDLoadedEvent" type="c:cometDLoaded"/>
+	<aura:handler name="cometDLoadedEvent" event="c:cometDLoaded"
+    action="{!c.sendNotification}"/>
+    
+    <aura:if isTrue="{!v.usersAccessing.length > 0}">
+    <article class="slds-card">
+        <header class="slds-card__header slds-grid" style="margin-bottom: 15px;">
+            <div class="slds-media slds-media--center slds-has-flexi-truncate">
+                <div class="slds-media__figure">
+                    <span class="slds-icon_container slds-icon-custom-custom26" title="description of icon when needed">
+                        <span class="lightningPrimitiveIcon" >
+                            <lightning:icon iconName="custom:custom26" size="small"/>
+                        </span>
+                        
+                    </span>
+                </div>
+                <div class="slds-media__body slds-text-heading--small">
+                    <h2>                                
+                        <span class="slds-text-heading--small">
+                            <span style="font-weight: bold;">Case Presence</span>
+                        </span>
+                    </h2>
+                </div>
+            </div>
+        </header>
+    <aura:iteration items="{!v.usersAccessing}" var="ua">
+           <div style="position: relative; display: inline-block; margin-left: 10px; margin-bottom: 10px;">  
+               <aura:if isTrue="{!ua.smallPhotoURL != null}">	
+                   <div class="slds-avatar slds-avatar_large slds-avatar_circle" onmouseover="{!c.display}" onmouseout="{!c.displayOut}"  >
+                       <img src="{!ua.smallPhotoURL}" /> 
+                   </div>
+                   <aura:set attribute="else">
+                       <div class="slds-avatar slds-avatar_large slds-avatar_circle" onmouseover="{!c.display}" onmouseout="{!c.displayOut}" >
+                           <abbr class="slds-avatar__initials slds-icon-standard-user" >{!ua.userNameAbbr}</abbr>
+                       </div>
+                   </aura:set>
+               </aura:if>
+               <div class="slds-popover slds-popover--tooltip slds-nubbin--top-left toggle" role="tooltip"  style="position:absolute;top:60px;left:0px; white-space: nowrap" aura:id="naveennazimudeen-tooltip" id="naveennazimudeen-tooltip" >
+                   <div class="slds-popover__body">{!ua.userName}</div>
+               </div> 
+              
+           </div> 
+  </aura:iteration>   
+  </article>
+</aura:if>
+</aura:component>

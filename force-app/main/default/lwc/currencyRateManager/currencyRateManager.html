@@ -1,0 +1,249 @@
+<template>
+    <lightning-card title="CAD Currency Rate Management" icon-name="standard:currency">
+        
+        <!-- Loading Spinner -->
+        <template if:true={isLoading}>
+            <lightning-spinner alternative-text="Processing..." size="medium"></lightning-spinner>
+        </template>
+
+        <!-- Main Content -->
+        <div class="slds-p-around_medium">
+            
+            <!-- Current Exchange Rate Display -->
+            <div class="slds-box slds-theme_default slds-m-bottom_medium">
+                <div class="slds-text-heading_small slds-m-bottom_x-small">
+                    Current CAD Exchange Rate
+                </div>
+                <div class="slds-text-heading_large slds-text-color_success">
+                    {formattedCurrentRate}
+                </div>
+                <div class="slds-text-body_small slds-m-top_x-small">
+                    1 USD = {formattedCurrentRate} CAD
+                </div>
+            </div>
+
+            <!-- Pricebook Sync Mode Selection -->
+            <div class="slds-box slds-m-bottom_medium">
+                <div class="slds-text-heading_small slds-m-bottom_small">
+                    Sync Mode
+                </div>
+                
+                <lightning-radio-group
+                    name="syncMode"
+                    label="Select Pricebook Sync Mode"
+                    options={syncModeOptions}
+                    value={syncMode}
+                    onchange={handleSyncModeChange}
+                    type="button"
+                    variant="label-hidden">
+                </lightning-radio-group>
+
+                <!-- Static Pricebook ID Input (shown only in static mode) -->
+                <template if:true={showStaticPricebookInput}>
+                    <lightning-input
+                        type="text"
+                        label="Static Pricebook ID"
+                        value={staticPricebookId}
+                        onchange={handleStaticPricebookChange}
+                        placeholder="Enter 18-character Pricebook ID"
+                        max-length="18"
+                        class="slds-m-top_small">
+                    </lightning-input>
+                </template>
+
+                <!-- Pricebook Info Button -->
+                <div class="slds-m-top_small">
+                    <lightning-button
+                        variant="base"
+                        label="View Pricebooks with CAD"
+                        onclick={handleViewPricebooks}
+                        icon-name="utility:list"
+                        class="slds-m-top_x-small">
+                    </lightning-button>
+                    <span class="slds-m-left_x-small slds-text-body_small">
+                        {pricebookCount} pricebook(s) with CAD entries
+                    </span>
+                </div>
+            </div>
+
+            <!-- New Exchange Rate Input Section -->
+            <div class="slds-form slds-m-bottom_medium">
+                <lightning-input
+                    data-id="newRate"
+                    type="number"
+                    label="New CAD Exchange Rate"
+                    value={newRate}
+                    onchange={handleNewRateChange}
+                    placeholder="Enter new exchange rate"
+                    step="0.0001"
+                    min="0.0001"
+                    required
+                    class="slds-m-bottom_small">
+                </lightning-input>
+
+                <!-- Action Buttons -->
+                <div class="slds-grid slds-grid_align-spread slds-m-top_medium">
+                    <lightning-button
+                        variant="brand"
+                        label="Update & Recalculate Prices"
+                        onclick={handleUpdateClick}
+                        disabled={isUpdateDisabled}
+                        icon-name="utility:refresh"
+                        class="slds-m-right_small">
+                    </lightning-button>
+                    
+                    <lightning-button
+                        variant="neutral"
+                        label="Reset"
+                        onclick={handleReset}
+                        icon-name="utility:clear">
+                    </lightning-button>
+                </div>
+            </div>
+
+            <!-- Information Box -->
+            <div class="slds-m-top_medium">
+                <div class="slds-text-body_small">
+                    <strong>Current Mode:</strong> {syncModeLabel}<br/>
+                    <strong>Note:</strong> Updating the exchange rate will automatically recalculate pricebook entries where both USD and CAD prices exist for the same product.
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Confirmation Modal -->
+        <template if:true={showConfirmDialog}>
+            <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    
+                    <!-- Modal Header -->
+                    <header class="slds-modal__header">
+                        <h2 class="slds-text-heading_medium">Confirm Rate Update</h2>
+                    </header>
+
+                    <!-- Modal Body -->
+                    <div class="slds-modal__content slds-p-around_medium">
+                        <p class="slds-m-bottom_small">
+                            <strong>Are you sure you want to update the CAD exchange rate and recalculate prices?</strong>
+                        </p>
+                        <p class="slds-text-body_small">
+                            Current Rate: <strong>{formattedCurrentRate}</strong><br/>
+                            New Rate: <strong>{newRate}</strong><br/>
+                            Sync Mode: <strong>{syncModeLabel}</strong>
+                        </p>
+                        <p class="slds-text-body_small slds-m-top_small slds-text-color_weak">
+                            {confirmationMessage}Each product's CAD price will be recalculated as: USD Price × New CAD Rate
+                        </p>
+                    </div>
+
+                    <!-- Modal Footer -->
+                    <footer class="slds-modal__footer">
+                        <lightning-button
+                            variant="neutral"
+                            label="Cancel"
+                            onclick={handleConfirmNo}>
+                        </lightning-button>
+                        <lightning-button
+                            variant="brand"
+                            label="Yes, Update"
+                            onclick={handleConfirmYes}>
+                        </lightning-button>
+                    </footer>
+                    
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </template>
+
+        <!-- Pricebook Information Modal -->
+        <template if:true={showPricebookModal}>
+            <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    
+                    <!-- Modal Header -->
+                    <header class="slds-modal__header">
+                        <h2 class="slds-text-heading_medium">Pricebooks with CAD Entries</h2>
+                    </header>
+
+                    <!-- Modal Body -->
+                    <div class="slds-modal__content slds-p-around_medium">
+                        <template if:true={pricebookList}>
+                            <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+                                <thead>
+                                    <tr class="slds-line-height_reset">
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="Pricebook Name">Pricebook Name</div>
+                                        </th>
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="Pricebook ID">ID</div>
+                                        </th>
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="USD Entries">USD Entries</div>
+                                        </th>
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="CAD Entries">CAD Entries</div>
+                                        </th>
+                                        <th scope="col">
+                                            <div class="slds-truncate" title="Status">Status</div>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <template for:each={pricebookList} for:item="pb">
+                                        <tr key={pb.pricebookId}>
+                                            <td>
+                                                <div class="slds-truncate" title={pb.pricebookName}>
+                                                    {pb.pricebookName}
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="slds-truncate" title={pb.pricebookId}>
+                                                    <code>{pb.pricebookId}</code>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="slds-truncate">
+                                                    {pb.usdEntryCount}
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="slds-truncate">
+                                                    {pb.cadEntryCount}
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <template if:true={pb.isActive}>
+                                                    <lightning-badge label="Active" variant="success"></lightning-badge>
+                                                </template>
+                                                <template if:false={pb.isActive}>
+                                                    <lightning-badge label="Inactive" variant="warning"></lightning-badge>
+                                                </template>
+                                            </td>
+                                        </tr>
+                                    </template>
+                                </tbody>
+                            </table>
+                        </template>
+                        <template if:false={pricebookList}>
+                            <p class="slds-text-align_center slds-m-vertical_medium">
+                                No pricebooks found with CAD entries.
+                            </p>
+                        </template>
+                    </div>
+
+                    <!-- Modal Footer -->
+                    <footer class="slds-modal__footer">
+                        <lightning-button
+                            variant="brand"
+                            label="Close"
+                            onclick={handleClosePricebookModal}>
+                        </lightning-button>
+                    </footer>
+                    
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </template>
+
+    </lightning-card>
+</template>

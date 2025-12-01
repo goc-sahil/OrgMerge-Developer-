@@ -1,0 +1,5 @@
+<apex:page >   
+<marquee>   
+<b style="color: rgb(0, 112, 192); font-family: Verdana, Helvetica, sans-serif; font-size: small;">Welcome to Invixium Access Salesforce Page. &nbsp; Please contact the system administrator in case of any issues.</b>   
+</marquee>   
+</apex:page>
