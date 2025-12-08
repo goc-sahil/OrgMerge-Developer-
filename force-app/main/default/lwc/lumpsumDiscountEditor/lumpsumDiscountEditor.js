@@ -93,13 +93,47 @@ export default class LumpsumDiscountEditor extends LightningElement {
 
     handleDiscountChange(event) {
         const value = parseFloat(event.target.value);
-        // guard: non-numeric or negative -> 0
-        this.lumpsumDiscount = (!isNaN(value) && value >= 0) ? value : 0;
+        
+        // Validation 1: Check if subtotal is 0
+        if (this.subtotal === 0) {
+            this.showToast('Error', 'Cannot apply discount when Subtotal is 0', 'error');
+            this.lumpsumDiscount = 0;
+            event.target.value = 0;
+            return;
+        }
+        
+        // Validation 2: Guard against non-numeric or negative values
+        if (isNaN(value) || value < 0) {
+            this.lumpsumDiscount = 0;
+            return;
+        }
+        
+        // Validation 3: Check if discount exceeds subtotal
+        if (value > this.subtotal) {
+            this.showToast('Error', `Discount cannot exceed Subtotal of ${this.currencyIsoCode} ${this.formatCurrency(this.subtotal)}`, 'error');
+            this.lumpsumDiscount = this.subtotal;
+            event.target.value = this.subtotal;
+            return;
+        }
+        
+        this.lumpsumDiscount = value;
     }
 
     handleSave() {
         // Basic guard: do not save if unchanged
         if (!this.showSaveButton) {
+            return;
+        }
+
+        // Validation: Check if subtotal is 0
+        if (this.subtotal === 0) {
+            this.showToast('Error', 'Cannot apply discount when Subtotal is 0', 'error');
+            return;
+        }
+
+        // Validation: Check if discount exceeds subtotal
+        if (this.lumpsumDiscount > this.subtotal) {
+            this.showToast('Error', `Discount cannot exceed Subtotal of ${this.currencyIsoCode} ${this.formatCurrency(this.subtotal)}`, 'error');
             return;
         }
 
@@ -113,14 +147,14 @@ export default class LumpsumDiscountEditor extends LightningElement {
 
         updateRecord(recordInput)
             .then(() => {
-                this.showToast('Success', 'Lumpsum discount saved', 'success');
+                this.showToast('Success', 'Quote saved successfully', 'success');
                 this.originalLumpsum = this.lumpsumDiscount;
                 // Refresh the record to get updated formula value from server
                 return refreshApex(this.wiredRecordResult);
             })
             .catch(error => {
                 const msg = error?.body?.message || error.message || 'Unknown error';
-                this.showToast('Error', 'Error saving lumpsum discount: ' + msg, 'error');
+                this.showToast('Error', 'Error saving Quote: ' + msg, 'error');
                 console.error('Update error:', error);
             })
             .finally(() => {

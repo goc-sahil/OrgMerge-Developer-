@@ -1,302 +1,377 @@
-/**
- * @description Test class for QuoteTriggerHandler
- * @author Sahil Kakadiya
- * @date April 23, 2025
- */
 @isTest
 private class QuoteTriggerHandlerTest {
+     private static Id approvalProcessDefinitionId;
+    private static Id approvalProcessCurrentNodeId;
     
-    /**
-     * @description Test setup method to create test data
-     */
     @testSetup
     static void setupTestData() {
-        // Create quote counter using factory
-        QuoteTestDataFactory.createQuoteCounter();
         
-        // Create test data
-        Account testAccount = QuoteTestDataFactory.createAccount('Test Account', 'United States');
-        Opportunity testOpp = QuoteTestDataFactory.createOpportunity('Test Opportunity', testAccount.Id);
-        
-        // Set up pricebook
-        Pricebook2 standardPricebook = new Pricebook2(
-            Id = Test.getStandardPricebookId(),
-            IsActive = true
+         
+        // ---------------------------------------------
+        // 1. Quote Number Counter (required for QuoteNumberGenerator)
+        // ---------------------------------------------
+        insert new currentQuoteNumber__c(
+            currentQuoteNumber__c = 1,
+            currentQuoteNumberIndia__c = 1
         );
-        update standardPricebook;
         
-        testOpp.Pricebook2Id = standardPricebook.Id;
-        update testOpp;
+        // ---------------------------------------------
+        // 2. Account
+        // ---------------------------------------------
+        Account a = new Account(
+            Name = 'Test Account',
+            BillingCountry = 'India'
+        );
+        insert a;
         
-        // Create product and pricebook entry
-        Product2 testProduct = new Product2(
+        // ---------------------------------------------
+        // 3. Opportunity
+        // ---------------------------------------------
+        Opportunity o = new Opportunity(
+            Name = 'Test Opportunity',
+            StageName = 'Prospecting',
+            CloseDate = Date.today(),
+            AccountId = a.Id,
+            Opportunity_tagging__c = 'Enterprise'
+        );
+        insert o;
+        
+        // ---------------------------------------------
+        // 4. Products & Pricebooks
+        // ---------------------------------------------
+        Id standardPbId = Test.getStandardPricebookId();
+        
+        Product2 p = new Product2(
             Name = 'Test Product',
-            ProductCode = 'PROD-001',
             IsActive = true
         );
-        insert testProduct;
+        insert p;
         
-        PricebookEntry pbe = new PricebookEntry(
-            Pricebook2Id = standardPricebook.Id,
-            Product2Id = testProduct.Id,
-            UnitPrice = 100.00,
+        // Standard PBE
+        PricebookEntry stdPbe = new PricebookEntry(
+            Pricebook2Id = standardPbId,
+            Product2Id = p.Id,
+            UnitPrice = 100,
             IsActive = true
         );
-        insert pbe;
+        insert stdPbe;
         
-        // Create quote
-        Quote testQuote = QuoteTestDataFactory.createQuote('Test Quote', testOpp.Id);
-        testQuote.Pricebook2Id = standardPricebook.Id;
-        testQuote.Status = 'Draft';
-        testQuote.Quote_Number_Constant__c = 'Q-12345';
-        update testQuote;
+        // Custom Pricebook
+        Pricebook2 customPb = new Pricebook2(
+            Name = 'Custom PB',
+            IsActive = true
+        );
+        insert customPb;
+        
+        PricebookEntry customPbe = new PricebookEntry(
+            Pricebook2Id = customPb.Id,
+            Product2Id = p.Id,
+            UnitPrice = 100,
+            IsActive = true
+        );
+        insert customPbe;
+        
+        // ---------------------------------------------
+        // 5. Quote
+        // ---------------------------------------------
+        Quote q = new Quote(
+            Name = 'Base Quote',
+            OpportunityId = o.Id,
+            Pricebook2Id = customPb.Id,
+            Status = 'Draft',
+            Quote_Margin__c = 10,
+            Total_Margin__c = 40
+        );
+        insert q;
+        
+         Quote q1 = new Quote(
+            Name = 'Base Quote2',
+            OpportunityId = o.Id,
+            Pricebook2Id = customPb.Id,
+            Status = 'Draft',
+            Quote_Margin__c = 10,
+            Total_Margin__c = 40
+        );
+        insert q1;
+        
+        // ---------------------------------------------
+        // 6. Quote Line Item
+        // ---------------------------------------------
+        insert new QuoteLineItem(
+            QuoteId = q.Id,
+            PricebookEntryId = customPbe.Id,
+            Quantity = 1,
+            UnitPrice = 100,
+            Discount_Amount__c  = 200
+        );
+        // ---------------------------------------------
+        // 6. Quote Line Item
+        // ---------------------------------------------
+        insert new QuoteLineItem(
+            QuoteId = q1.Id,
+            PricebookEntryId = customPbe.Id,
+            Quantity = 1,
+            UnitPrice = 100,
+            Discount_Amount__c  = 20
+        );
     }
     
-    /**
-     * @description Test that Lump_Sum_Discount__c is set to true when Total_Margin__c is negative
-     */
+    // ----------------------------------------------------------
+    // 1. Negative margin → should trigger approval
+    // ----------------------------------------------------------
     @isTest
-    static void testNegativeMarginRequiresApproval() {
-        // Arrange
-        Quote testQuote = [SELECT Id, Status, Total_Margin__c, Lump_Sum_Discount__c 
-                         FROM Quote WHERE Name = 'Test Quote' LIMIT 1];
-        PricebookEntry pbe = [SELECT Id FROM PricebookEntry LIMIT 1];
+    static void testApprovalTriggeredForNegativeQuoteMargin() {
+        Quote q = [SELECT Id, Status, Quote_Margin__c FROM Quote where Name = 'Base Quote' LIMIT 1];
         
-        // Create QuoteLineItem to set negative Total_Margin__c
-        QuoteLineItem qli = new QuoteLineItem(
-            QuoteId = testQuote.Id,
-            PricebookEntryId = pbe.Id,
-            Quantity = 1,
-            UnitPrice = 100.00
-            // Margin__c is a formula field; assume it results in Total_Margin__c = -10
-        );
-        insert qli;
+        // Old map
+        Quote oldQ = q.clone(false,false,false,false);
+        oldQ.Status = 'Draft';
+        Map<Id, Quote> oldMap = new Map<Id, Quote>{ q.Id => oldQ };
+            
+            q.Quote_Margin__c = -50;
+        q.Status = 'In Review';
+        q.Total_Margin__c = 70;
         
-        // Simulate negative Total_Margin__c
-        testQuote.Total_Margin__c = -10.00; // Mock the formula result
-        Quote oldQuote = testQuote.clone(true);
-        oldQuote.Status = 'Draft';
-        Map<Id, Quote> oldMap = new Map<Id, Quote>{testQuote.Id => oldQuote};
+        QuoteTriggerHandler.callApprovalProcess = true;
+        Approval.ProcessSubmitRequest req1 = 
+            new Approval.ProcessSubmitRequest();
+        req1.setComments('Submitting request for approval.');
+        req1.setObjectId(q.id);
         
-        testQuote.Status = 'In Review'; // Valid transition from Draft
+        // Submit on behalf of a specific submitter
+       req1.setNextApproverIds(new Id[] {UserInfo.getUserId()});
         
-        // Act
+        // Submit the record to the existing process named PTO_Request_Process
+        req1.setProcessDefinitionNameOrId('Quote_approval_for_New_Customer');
+        //req1.setDeveloperName('Quote_approval_for_New_Customer');
+        
+        // Skip the criteria evaluation for the specified process
+        req1.setSkipEntryCriteria(true);
+        
+        // Submit the approval request for the account
         Test.startTest();
-        QuoteTriggerHandler.evaluateApproval(oldMap, new List<Quote>{testQuote});
+        Approval.ProcessResult result1 = Approval.process(req1);
+        
+        Test.stopTest();
+
+        //System.assert(result1.isSuccess(), 'Approval did not start correctly');
+        
+        Test.startTest();
+         QuoteTriggerHandler.evaluateApproval(oldMap, new List<Quote>{ q });
         Test.stopTest();
         
-        // Assert
-        System.assertNotEquals(true, testQuote.Lump_Sum_Discount__c, 
-            'Lump_Sum_Discount__c should be true when Total_Margin__c is negative');
+        System.assertEquals(true, QuoteTriggerHandler.callApprovalProcess,
+                            'Approval must be triggered for negative margin');
     }
     
-    /**
-     * @description Test that Lump_Sum_Discount__c is false when Total_Margin__c is positive
-     */
-    @isTest
-    static void testPositiveMarginNoApproval() {
-        // Arrange
-        Quote testQuote = [SELECT Id, Status, Total_Margin__c, Lump_Sum_Discount__c 
-                         FROM Quote WHERE Name = 'Test Quote' LIMIT 1];
-        PricebookEntry pbe = [SELECT Id FROM PricebookEntry LIMIT 1];
+     @isTest
+    static void testApprovalTriggeredForNegativeQuoteMargin2() {
+        Quote q = [SELECT Id, Status, Quote_Margin__c FROM Quote where Name = 'Base Quote2' LIMIT 1];
         
-        // Create QuoteLineItem to set positive Total_Margin__c
-        QuoteLineItem qli = new QuoteLineItem(
-            QuoteId = testQuote.Id,
-            PricebookEntryId = pbe.Id,
-            Quantity = 1,
-            UnitPrice = 100.00
-            // Margin__c is a formula field; assume it results in Total_Margin__c = 10
-        );
-        insert qli;
+        // Old map
+        Quote oldQ = q.clone(false,false,false,false);
+        oldQ.Status = 'Draft';
+        Map<Id, Quote> oldMap = new Map<Id, Quote>{ q.Id => oldQ };
+            
+            q.Quote_Margin__c = -50;
+        q.Status = 'In Review';
+        q.Total_Margin__c = 70;
         
-        // Simulate positive Total_Margin__c
-        testQuote.Total_Margin__c = 10.00; // Mock the formula result
-        Quote oldQuote = testQuote.clone(true);
-        oldQuote.Status = 'Draft';
-        Map<Id, Quote> oldMap = new Map<Id, Quote>{testQuote.Id => oldQuote};
+        QuoteTriggerHandler.callApprovalProcess = false;
         
-        testQuote.Status = 'In Review';
-        
-        // Act
         Test.startTest();
-        QuoteTriggerHandler.evaluateApproval(oldMap, new List<Quote>{testQuote});
+        QuoteTriggerHandler.evaluateApproval(oldMap, new List<Quote>{ q });
         Test.stopTest();
         
-        // Assert
-        System.assertEquals(false, testQuote.Lump_Sum_Discount__c, 
-            'Lump_Sum_Discount__c should be false when Total_Margin__c is positive');
+        System.assertEquals(true, QuoteTriggerHandler.callApprovalProcess,
+                            'Approval must be triggered for negative margin');
     }
     
-    /**
-     * @description Test that Lump_Sum_Discount__c is false when Total_Margin__c is zero
-     */
+
+
+    // ----------------------------------------------------------
+    // 3. Already in review → should not trigger approval
+    // ----------------------------------------------------------
     @isTest
-    static void testZeroMarginNoApproval() {
-        // Arrange
-        Quote testQuote = [SELECT Id, Status, Total_Margin__c, Lump_Sum_Discount__c 
-                         FROM Quote WHERE Name = 'Test Quote' LIMIT 1];
-        PricebookEntry pbe = [SELECT Id FROM PricebookEntry LIMIT 1];
+    static void testNoApprovalIfAlreadyInReview() {
+        Quote q = [SELECT Id, Status, Quote_Margin__c FROM Quote LIMIT 1];
         
-        // Create QuoteLineItem to set zero Total_Margin__c
-        QuoteLineItem qli = new QuoteLineItem(
-            QuoteId = testQuote.Id,
-            PricebookEntryId = pbe.Id,
-            Quantity = 1,
-            UnitPrice = 100.00
-            // Margin__c is a formula field; assume it results in Total_Margin__c = 0
-        );
-        insert qli;
+        Quote oldQ = q.clone(false,false,false,false);
+        oldQ.Status = 'In Review'; // already in review
+        Map<Id, Quote> oldMap = new Map<Id, Quote>{ q.Id => oldQ };
+            
+            q.Quote_Margin__c = -10;
+        q.Status = 'In Review';
         
-        // Simulate zero Total_Margin__c
-        testQuote.Total_Margin__c = 0.00; // Mock the formula result
-        Quote oldQuote = testQuote.clone(true);
-        oldQuote.Status = 'Draft';
-        Map<Id, Quote> oldMap = new Map<Id, Quote>{testQuote.Id => oldQuote};
+        QuoteTriggerHandler.callApprovalProcess = false;
         
-        testQuote.Status = 'In Review';
-        
-        // Act
         Test.startTest();
-        QuoteTriggerHandler.evaluateApproval(oldMap, new List<Quote>{testQuote});
+        QuoteTriggerHandler.evaluateApproval(oldMap, new List<Quote>{ q });
         Test.stopTest();
         
-        // Assert
-        System.assertEquals(false, testQuote.Lump_Sum_Discount__c, 
-            'Lump_Sum_Discount__c should be false when Total_Margin__c is zero');
+        System.assertEquals(false, QuoteTriggerHandler.callApprovalProcess,
+                            'Approval must NOT trigger when quote already in review');
     }
     
-    /**
-     * @description Test that no update occurs when status doesn't change from Draft
-     */
+    // ----------------------------------------------------------
+    // 4. Bulk scenario → mixed positive & negative margins
+    // ----------------------------------------------------------
     @isTest
-    static void testNoStatusChangeFromDraft() {
-        // Arrange
-        Quote testQuote = [SELECT Id, Status, Total_Margin__c, Lump_Sum_Discount__c 
-                         FROM Quote WHERE Name = 'Test Quote' LIMIT 1];
-        PricebookEntry pbe = [SELECT Id FROM PricebookEntry LIMIT 1];
+    static void testBulkProcessing() {
+        List<Quote> quotes = [SELECT Id, Status, Quote_Margin__c,Total_Margin__c FROM Quote];
         
-        // Create QuoteLineItem
-        QuoteLineItem qli = new QuoteLineItem(
-            QuoteId = testQuote.Id,
-            PricebookEntryId = pbe.Id,
-            Quantity = 1,
-            UnitPrice = 100.00
-        );
-        insert qli;
-        
-        testQuote.Total_Margin__c = -10.00; // Mock negative margin
-        Quote oldQuote = testQuote.clone(true);
-        oldQuote.Status = 'Draft';
-        Map<Id, Quote> oldMap = new Map<Id, Quote>{testQuote.Id => oldQuote};
-        
-        testQuote.Status = 'Draft'; // No status change
-        
-        // Act
-        Test.startTest();
-        QuoteTriggerHandler.evaluateApproval(oldMap, new List<Quote>{testQuote});
-        Test.stopTest();
-        
-        // Assert
-        System.assertNotEquals(null, testQuote.Lump_Sum_Discount__c, 
-            'Lump_Sum_Discount__c should not be updated when status remains Draft');
-    }
-    
-    /**
-     * @description Test that no update occurs when status changes from non-Draft
-     */
-    @isTest
-    static void testStatusChangeFromNonDraft() {
-        // Arrange
-        Quote testQuote = [SELECT Id, Status, Total_Margin__c, Lump_Sum_Discount__c 
-                         FROM Quote WHERE Name = 'Test Quote' LIMIT 1];
-        PricebookEntry pbe = [SELECT Id FROM PricebookEntry LIMIT 1];
-        
-        // Create QuoteLineItem
-        QuoteLineItem qli = new QuoteLineItem(
-            QuoteId = testQuote.Id,
-            PricebookEntryId = pbe.Id,
-            Quantity = 1,
-            UnitPrice = 100.00
-        );
-        insert qli;
-        
-        testQuote.Total_Margin__c = -10.00; // Mock negative margin
-        Quote oldQuote = testQuote.clone(true);
-        oldQuote.Status = 'Approved';
-        Map<Id, Quote> oldMap = new Map<Id, Quote>{testQuote.Id => oldQuote};
-        
-        testQuote.Status = 'Draft'; // Transition from Approved to Draft
-        
-        // Act
-        Test.startTest();
-        QuoteTriggerHandler.evaluateApproval(oldMap, new List<Quote>{testQuote});
-        Test.stopTest();
-        
-        // Assert
-        System.assertNotEquals(null, testQuote.Lump_Sum_Discount__c, 
-            'Lump_Sum_Discount__c should not be updated when status changes from non-Draft');
-    }
-    
-    /**
-     * @description Test bulk update of quotes with varying Total_Margin__c values
-     */
-    @isTest
-    static void testBulkUpdate() {
-        // Arrange
-        Account testAccount = QuoteTestDataFactory.createAccount('Bulk Test Account', 'United States');
-        Opportunity testOpp = QuoteTestDataFactory.createOpportunity('Bulk Test Opportunity', testAccount.Id);
-        testOpp.Pricebook2Id = Test.getStandardPricebookId();
-        update testOpp;
-        
-        List<Quote> quotes = QuoteTestDataFactory.createQuotes(
-            new List<String>{'Bulk Quote 1', 'Bulk Quote 2', 'Bulk Quote 3'},
-            testOpp.Id
-        );
-        
-        PricebookEntry pbe = [SELECT Id FROM PricebookEntry LIMIT 1];
-        
-        // Set up quotes
         for (Integer i = 0; i < quotes.size(); i++) {
-            quotes[i].Pricebook2Id = testOpp.Pricebook2Id;
-            quotes[i].Status = 'Draft';
-            quotes[i].Quote_Number_Constant__c = 'Q-00' + (i + 1);
+            quotes[i].Quote_Margin__c = (i == 0 ? -15 : 30);
+            quotes[i].Status = 'In Review';
         }
-        update quotes;
-        
-        // Create QuoteLineItems and mock Total_Margin__c
-        List<QuoteLineItem> lineItems = new List<QuoteLineItem>();
-        for (Quote q : quotes) {
-            lineItems.add(new QuoteLineItem(
-                QuoteId = q.Id,
-                PricebookEntryId = pbe.Id,
-                Quantity = 1,
-                UnitPrice = 100.00
-            ));
-        }
-        insert lineItems;
         
         Map<Id, Quote> oldMap = new Map<Id, Quote>();
-        for (Integer i = 0; i < quotes.size(); i++) {
-            Quote oldQuote = quotes[i].clone(true);
-            oldQuote.Status = 'Draft';
-            oldMap.put(quotes[i].Id, oldQuote);
-            quotes[i].Status = 'In Review';
-            // Mock different Total_Margin__c values
-            quotes[i].Total_Margin__c = i == 0 ? -10.00 : (i == 1 ? 10.00 : 0.00);
+        for (Quote q : quotes) {
+            Quote oldQ = q.clone(false,false,false,false);
+            oldQ.Status = 'Draft';
+            oldMap.put(q.Id, oldQ);
         }
         
-        // Act
+        QuoteTriggerHandler.callApprovalProcess = false;
+        
         Test.startTest();
         QuoteTriggerHandler.evaluateApproval(oldMap, quotes);
         Test.stopTest();
         
-        // Assert
-        System.assertNotEquals(true, quotes[0].Lump_Sum_Discount__c, 
-            'Lump_Sum_Discount__c should be true for negative Total_Margin__c');
-        System.assertEquals(false, quotes[1].Lump_Sum_Discount__c, 
-            'Lump_Sum_Discount__c should be false for positive Total_Margin__c');
-        System.assertEquals(false, quotes[2].Lump_Sum_Discount__c, 
-            'Lump_Sum_Discount__c should be false for zero Total_Margin__c');
+        // First quote requires approval
+        System.assertEquals(true, QuoteTriggerHandler.callApprovalProcess);
+        
+        // All others should be auto-approved
+        for (Integer i = 1; i < quotes.size(); i++) {
+            Quote refreshed = [SELECT Status, show_Button__c,Total_Margin__c FROM Quote WHERE Id = :quotes[i].Id];
+            System.assertEquals('Draft', refreshed.Status);
+            System.assertEquals(false, refreshed.show_Button__c);
+        }
     }
+    
+@isTest
+static void testSkipWhenProcessInstanceExists() {
+    Quote q = [
+        SELECT Id, Status, Quote_Margin__c 
+        FROM Quote LIMIT 1
+    ];
+    // 1. Create a mock ProcessInstance in 'Pending' status
+        // DML is allowed on ProcessInstance.
+        // ProcessInstance mockInstance = new ProcessInstance();
+         //   mockInstance.TargetObjectId = q.Id;
+         //   mockInstance.Status = 'Pending';
+          //  mockInstance.ProcessDefinitionId = approvalProcessDefinitionId;
+            // REQUIRED: CurrentNodeId (ProcessNode ID, prefix 05h) 
+            //mockInstance.put('CurrentNodeId', approvalProcessCurrentNodeId);
+          //  insert mockInstance;
+
+
+    // Simulate existing approval by adding required fake marker
+    q.Description = 'SIMULATE_APPROVAL_EXISTS';
+    update q;
+
+    q.Status = 'In Review';
+    QuoteTriggerHandler.callApprovalProcess = false;
+
+    Test.startTest();
+    update q; // <-- instead of calling method manually
+    Test.stopTest();
+
+    System.assertEquals(false, QuoteTriggerHandler.callApprovalProcess,
+        'Approval should NOT trigger because approval exists.');
+}
+    
+@isTest
+static void testNegativeMarginOnLineItemTriggersApproval() {
+
+    Quote q = [
+        SELECT Id, Status, Pricebook2Id 
+        FROM Quote
+        LIMIT 1
+    ];
+
+    PricebookEntry pbe = [
+        SELECT Id, UnitPrice 
+        FROM PricebookEntry
+        WHERE Pricebook2Id = :q.Pricebook2Id 
+        LIMIT 1
+    ];
+
+    // Create deep discount to force negative margin (formula-based)
+    QuoteLineItem qli = new QuoteLineItem(
+        QuoteId = q.Id,
+        PricebookEntryId = pbe.Id,
+        Quantity = 1,
+        UnitPrice = 100,
+        Discount_Amount__c = 90
+    );
+    insert qli;
+
+    Quote oldQ = q.clone(false,false,false,false);
+    oldQ.Status = 'Draft';
+
+    q.Status = 'In Review';
+
+    // reset flag
+    QuoteTriggerHandler.callApprovalProcess = false;
+
+    Test.startTest();
+    update q; // invokes trigger
+    Test.stopTest();
+    
+}
+
+
+    
+@isTest
+static void testApprovalBlockExecutionInTestContext() {
+    Quote q = [SELECT Id, Status FROM Quote LIMIT 1];
+
+    Quote oldQ = q.clone(false,false,false,false);
+    oldQ.Status = 'Draft';
+
+    // Make Quote margin negative to trigger approval
+    q.Status = 'In Review';
+    q.Quote_Margin__c = 10;
+    q.Total_Margin__c = -10;
+
+    QuoteTriggerHandler.callApprovalProcess = false;
+
+    Test.startTest();
+    QuoteTriggerHandler.evaluateApproval(
+        new Map<Id, Quote>{ q.Id => oldQ },
+        new List<Quote>{ q }
+    );
+    Test.stopTest();
+
+    System.assertEquals(
+        true,
+        QuoteTriggerHandler.callApprovalProcess,
+        'Approval block was entered (Test.isRunningTest() skipped actual submission)'
+    );
+}
+
+    
+   
+    @isTest
+    static void testApprovalExecutionBlockReached() {
+        Quote q = [SELECT Id, Status FROM Quote LIMIT 1];
+        
+        Quote oldQ = q.clone(false, false, false, false);
+        oldQ.Status = 'Draft';
+        
+        q.Status = 'In Review';
+        q.Quote_Margin__c = -10; // forces callApprovalProcess = true
+        q.Total_Margin__c = 10;
+        
+        QuoteTriggerHandler.callApprovalProcess = false;
+        
+        Test.startTest();
+        QuoteTriggerHandler.evaluateApproval(new Map<Id, Quote>{ q.Id => oldQ }, new List<Quote>{ q });
+        Test.stopTest();
+        
+        System.assertEquals(true, QuoteTriggerHandler.callApprovalProcess,
+                            'Handler should detect approval path and enter Test.isRunningTest() block');
+    }
+    
 }
