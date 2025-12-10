@@ -38,15 +38,11 @@ public with sharing class QuoteTriggerHandler {
                     }
                 }
                 if(callApprovalProcess){
-                 if (!Test.isRunningTest()) {
-                        ProcessDefinition pd = [SELECT Id 
-                                                FROM ProcessDefinition 
-                                                WHERE DeveloperName = 'Quote_approval_for_New_Customer' 
-                                                LIMIT 1];
-
+                    if (!Test.isRunningTest()) {
+                        // Don't specify ProcessDefinitionId - let Salesforce auto-detect the applicable approval process
+                        // This is necessary when the approval process has no entry criteria
                         Approval.ProcessSubmitRequest req = new Approval.ProcessSubmitRequest();
                         req.setObjectId(q.Id);
-                        req.setProcessDefinitionNameOrId(pd.Id);
                         req.setComments('Submitted automatically because margin is below 0');
 
                         Approval.ProcessResult result = Approval.process(req);
@@ -54,13 +50,15 @@ public with sharing class QuoteTriggerHandler {
                         if (!result.isSuccess()) {
                             q.addError('Approval submission failed: ' + result.getErrors()[0].getMessage());
                         }
-                    }else{
+                    }
+                    else{
                      quotesToUpdate.add(new Quote(
                         Id = q.Id,
                         show_Button__c = true,
                         status = 'Approved'
                		 ));
                     
+                    }
                 }
             }
         }

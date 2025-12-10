@@ -16,4 +16,5 @@ trigger QuoteTrigger on Quote (before insert, before update, after insert, after
         QuoteTriggerHandler.hasRun = true;
         QuoteTriggerHandler.evaluateApproval(Trigger.oldMap, Trigger.new);
     }
+    
 }

@@ -279,4 +279,5 @@ public class QuoteLineItemTriggerHandler {
 
         System.debug('=== EXITING setSubscriptionTerm ===');
     }
+
 }
